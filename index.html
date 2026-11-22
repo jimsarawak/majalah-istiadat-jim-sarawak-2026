@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="ms" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Istiadat Penganugerahan Pingat Perkhidmatan | JIM Zon Sarawak 2026</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cinzel, Playfair Display, Great Vibes & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Tone.js (Sandaran Irama Gamelan Pentatonik & Kesan Bunyi Halus) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <!-- Skrip Awal: Penukar Pautan Gambar Google Drive & Pengendali Ralat Imej -->
+    <script>
+        window.extractDriveFileId = function(url) {
+            if (!url) return null;
+            const s = String(url).trim();
+            if (/^[a-zA-Z0-9_-]{25,}$/.test(s)) return s;
+            const m1 = s.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (m1) return m1[1];
+            const m2 = s.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (m2) return m2[1];
+            return null;
+        };
+
+        window.resolveDriveImageUrl = function(url, attempt) {
+            attempt = attempt || 0;
+            if (!url) return '';
+            const cleanUrl = String(url).trim();
+            const fileId = window.extractDriveFileId(cleanUrl);
+            if (!fileId) return cleanUrl;
+            if (attempt === 0) return 'https://lh3.googleusercontent.com/d/' + fileId + '=w400';
+            if (attempt === 1) return 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w400';
+            if (attempt === 2) return 'https://drive.google.com/uc?export=view&id=' + fileId;
+            return '';
+        };
+
+        window.handleRecipientImgError = function(imgEl) {
+            if (!imgEl) return;
+            const rawUrl = imgEl.getAttribute('data-raw-url') || '';
+            const attempt = parseInt(imgEl.getAttribute('data-attempt') || '0', 10) + 1;
+            const nextUrl = window.resolveDriveImageUrl(rawUrl, attempt);
+            if (nextUrl && attempt <= 2) {
+                imgEl.setAttribute('data-attempt', String(attempt));
+                imgEl.src = nextUrl;
+            } else {
+                imgEl.style.display = 'none';
+                if (imgEl.nextElementSibling) {
+                    imgEl.nextElementSibling.style.display = 'flex';
+                }
+            }
+        };
+    </script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: {
+                            950: '#04060A',
+                            900: '#090D16',
+                            800: '#101726',
+                            700: '#192338'
+                        },
+                        amberGold: {
+                            100: '#FEF7E0',
+                            200: '#FDE68A',
+                            300: '#FCD34D',
+                            400: '#F59E0B',
+                            500: '#D97706',
+                            600: '#B45309'
+                        },
+                        ivory: '#FAFAFA'
+                    },
+                    fontFamily: {
+                        cinzel: ['"Cinzel"', 'serif'],
+                        playfair: ['"Playfair Display"', 'serif'],
+                        script: ['"Great Vibes"', 'cursive'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'gold-glow': '0 0 30px rgba(245, 158, 11, 0.25)',
+                        'royal-card': '0 15px 40px -12px rgba(0, 0, 0, 0.85)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #04060A;
+            color: #FAFAFA;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        input, textarea, select, .selectable-text {
+            user-select: text;
+        }
+
+        /* Latar Belakang Tekstur Songket & Cahaya Istiadat */
+        .royal-songket-bg {
+            background-color: #070A12;
+            background-image: 
+                radial-gradient(circle at 18% 20%, rgba(245, 158, 11, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 82% 80%, rgba(217, 119, 6, 0.14) 0%, transparent 45%),
+                radial-gradient(rgba(252, 211, 77, 0.06) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 28px 28px;
+        }
+
+        /* Teks Gradien Emas Jingga */
+        .text-amber-gold-gradient {
+            background: linear-gradient(180deg, #FEF08A 0%, #F59E0B 48%, #EA580C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(245, 158, 11, 0.35));
+        }
+
+        .text-royal-gold {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FCD34D 45%, #D97706 85%, #FEF3C7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shimmerGold 6s linear infinite;
+        }
+
+        @keyframes shimmerGold {
+            to { background-position: 200% center; }
+        }
+
+        /* Animasi Menyelak Halaman Majalah */
+        .magazine-page {
+            display: none;
+            opacity: 0;
+            transform: translateX(24px) scale(0.99);
+            transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .magazine-page.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+
+        .magazine-page.slide-back {
+            transform: translateX(-24px) scale(0.99);
+        }
+
+        /* Bingkai Istiadat Berganda */
+        .ceremonial-frame {
+            position: relative;
+            border: 1px solid rgba(245, 158, 11, 0.38);
+            box-shadow: inset 0 0 0 4px rgba(7, 10, 18, 0.88), inset 0 0 0 5px rgba(245, 158, 11, 0.18);
+        }
+
+        /* Penunjuk Gelombang Muzik Gamelan */
+        .equalizer-bar {
+            width: 3px;
+            background-color: #FCD34D;
+            border-radius: 9999px;
+            transition: height 0.2s ease;
+        }
+        .playing .equalizer-bar:nth-child(1) { animation: eq 0.7s ease-in-out infinite alternate; }
+        .playing .equalizer-bar:nth-child(2) { animation: eq 0.5s ease-in-out infinite alternate 0.2s; }
+        .playing .equalizer-bar:nth-child(3) { animation: eq 0.8s ease-in-out infinite alternate 0.4s; }
+        .playing .equalizer-bar:nth-child(4) { animation: eq 0.6s ease-in-out infinite alternate 0.1s; }
+
+        @keyframes eq {
+            0% { height: 4px; }
+            100% { height: 15px; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #04060A; }
+        ::-webkit-scrollbar-thumb { background: #B45309; border-radius: 9999px; }
+
+        /* Mod Cetak Seperti Majalah Sebenar */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 12mm;
+            }
+            body {
+                background: #FFFFFF !important;
+                color: #0F172A !important;
+            }
+            #top-nav, #bottom-controls, #gold-particles, #bg-ornament-layer, .no-print {
+                display: none !important;
+            }
+            main {
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+            .magazine-page {
+                display: block !important;
+                opacity: 1 !important;
+                transform: none !important;
+                page-break-after: always;
+                break-after: page;
+                background: #FFFFFF !important;
+                color: #0F172A !important;
+                border: 2px solid #B45309 !important;
+                box-shadow: none !important;
+                margin-bottom: 20px;
+                padding: 20px !important;
+            }
+            .magazine-page:last-child {
+                page-break-after: auto;
+                break-after: auto;
+            }
+            .text-amber-gold-gradient, .text-royal-gold {
+                -webkit-text-fill-color: #92400E !important;
+                filter: none !important;
+            }
+            .bg-obsidian-900, .bg-obsidian-800, .bg-obsidian-950, .royal-songket-bg {
+                background: #FFFBEB !important;
+                color: #1E293B !important;
+                border-color: #D97706 !important;
+            }
+            .text-ivory, .text-slate-200, .text-slate-300, .text-slate-400 {
+                color: #1E293B !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-amberGold-400 selection:text-obsidian-950">
+
+    <!-- Kanvas Animasi Habuk Partikel Emas & Bokeh Terapung -->
+    <canvas id="gold-particles" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Lapisan Hadapan Ornamen Bunga Melayu (Tampil Jelas di Penjuru Cover & Halaman) -->
+    <div id="bg-ornament-layer" class="fixed inset-0 pointer-events-none z-20 overflow-hidden">
+        <!-- Ornamen Bunga Kiri Atas -->
+        <img src="https://lh3.googleusercontent.com/d/14rddvylbqD_VUJ8QNLPFMTFcuVfJyG2I=w1400" data-raw-url="14rddvylbqD_VUJ8QNLPFMTFcuVfJyG2I" data-attempt="0" alt="Ornamen Bunga Melayu 1" referrerpolicy="no-referrer" onerror="handleRecipientImgError(this)" class="absolute -top-6 -left-6 w-56 sm:w-80 lg:w-[420px] h-auto object-contain opacity-75 mix-blend-lighten filter drop-shadow-[0_4px_18px_rgba(245,158,11,0.45)]">
+        <!-- Ornamen Bunga Kanan Bawah -->
+        <img src="https://lh3.googleusercontent.com/d/1srTuDpXkoqgnHvzCKsRlQSiRy5hjbdFz=w1400" data-raw-url="1srTuDpXkoqgnHvzCKsRlQSiRy5hjbdFz" data-attempt="0" alt="Ornamen Bunga Melayu 2" referrerpolicy="no-referrer" onerror="handleRecipientImgError(this)" class="absolute -bottom-6 -right-6 w-56 sm:w-80 lg:w-[420px] h-auto object-contain opacity-75 mix-blend-lighten filter drop-shadow-[0_4px_18px_rgba(245,158,11,0.45)]">
+    </div>
+
+    <!-- Bar Navigasi Atas (Bersih & Tanpa Butang Admin Awam) -->
+    <header id="top-nav" class="sticky top-0 z-40 bg-obsidian-950/90 backdrop-blur-md border-b border-amberGold-400/25 shadow-xl">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Identiti Rasmi Atas -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="goToPage(1)">
+                    <img src="https://lh3.googleusercontent.com/d/1hm_WpQ7aFhmDtvz-udz-Pve2YGh2F265=w200" alt="Logo JIM" referrerpolicy="no-referrer" onerror="this.style.display='none'" class="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]">
+                    <div>
+                        <span class="font-cinzel font-extrabold text-xs sm:text-sm tracking-wider text-amberGold-300 block leading-tight">
+                            ISTIADAT PENGANUGERAHAN PINGAT PERKHIDMATAN
+                        </span>
+                        <span class="text-[11px] text-slate-300 tracking-wide block font-medium">
+                            JIM Zon Sarawak 2026
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Menu Kandungan Majalah (6 Halaman) -->
+                <nav class="hidden xl:flex items-center space-x-1" aria-label="Navigasi Halaman Majalah">
+                    <button onclick="goToPage(1)" data-nav="1" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all">01. Kulit Hadapan</button>
+                    <button onclick="goToPage(2)" data-nav="2" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all">02. Ucapan &amp; Atur Cara</button>
+                    <button onclick="goToPage(3)" data-nav="3" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all">03. Pingat &amp; Statistik</button>
+                    <button onclick="goToPage(4)" data-nav="4" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all">04. Direktori Penerima</button>
+                    <button onclick="goToPage(5)" data-nav="5" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all">05. Jawatankuasa</button>
+                    <button onclick="goToPage(6)" data-nav="6" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all">06. Penghargaan</button>
+                </nav>
+
+                <!-- Kawalan Audio Gamelan, Cetak & Menu -->
+                <div class="flex items-center space-x-1.5 sm:space-x-2">
+                    <!-- Butang Pemain Irama Gamelan -->
+                    <button id="gamelan-btn" onclick="toggleGamelanMusic()" title="Main / Henti Irama Gamelan" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-amberGold-500/15 hover:bg-amberGold-500/25 border border-amberGold-400/40 text-amberGold-200 text-xs font-medium flex items-center space-x-2 transition">
+                        <div id="gamelan-eq" class="flex items-end space-x-0.5 h-3.5">
+                            <span class="equalizer-bar h-1.5"></span>
+                            <span class="equalizer-bar h-3"></span>
+                            <span class="equalizer-bar h-2"></span>
+                            <span class="equalizer-bar h-2.5"></span>
+                        </div>
+                        <span id="gamelan-label" class="hidden sm:inline">Irama Gamelan</span>
+                        <i id="gamelan-icon" class="fa-solid fa-play text-[11px] text-amberGold-300"></i>
+                    </button>
+
+                    <!-- Butang Cetak Majalah Fizikal -->
+                    <button onclick="printMagazine()" title="Cetak Majalah (Susunan A4)" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-obsidian-800/90 hover:bg-obsidian-700 border border-amberGold-400/30 text-amberGold-200 text-xs flex items-center space-x-1.5 transition">
+                        <i class="fa-solid fa-print"></i>
+                        <span class="hidden md:inline">Cetak</span>
+                    </button>
+
+                    <!-- Butang Skrin Penuh -->
+                    <button onclick="toggleFullScreen()" title="Skrin Penuh" class="hidden sm:inline-flex p-2 rounded-lg bg-obsidian-800/90 hover:bg-obsidian-700 border border-amberGold-400/30 text-amberGold-200 transition">
+                        <i class="fa-solid fa-expand text-xs"></i>
+                    </button>
+
+                    <!-- Butang Menu Mudah Alih / Tablet -->
+                    <button onclick="toggleMobileMenu()" class="xl:hidden p-2 rounded-lg bg-amberGold-500/20 border border-amberGold-400/40 text-amberGold-200">
+                        <i class="fa-solid fa-bars text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bar Kemajuan Halaman -->
+            <div class="w-full bg-obsidian-800 h-1 overflow-hidden">
+                <div id="reading-progress" class="bg-gradient-to-r from-amberGold-600 via-amberGold-400 to-amberGold-200 h-full transition-all duration-500" style="width: 16.66%;"></div>
+            </div>
+        </div>
+
+        <!-- Dropdown Menu Responsif -->
+        <div id="mobile-menu" class="hidden xl:hidden bg-obsidian-900/95 backdrop-blur-md border-b border-amberGold-400/30 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="goToPage(1); toggleMobileMenu()" data-nav="1" class="nav-tab w-full text-left px-3 py-2 rounded-lg text-sm font-medium block">01. Kulit Hadapan Istiadat</button>
+            <button onclick="goToPage(2); toggleMobileMenu()" data-nav="2" class="nav-tab w-full text-left px-3 py-2 rounded-lg text-sm font-medium block">02. Ucapan &amp; Atur Cara Majlis</button>
+            <button onclick="goToPage(3); toggleMobileMenu()" data-nav="3" class="nav-tab w-full text-left px-3 py-2 rounded-lg text-sm font-medium block">03. Keterangan Pingat &amp; Statistik</button>
+            <button onclick="goToPage(4); toggleMobileMenu()" data-nav="4" class="nav-tab w-full text-left px-3 py-2 rounded-lg text-sm font-medium block">04. Direktori Penerima Pingat</button>
+            <button onclick="goToPage(5); toggleMobileMenu()" data-nav="5" class="nav-tab w-full text-left px-3 py-2 rounded-lg text-sm font-medium block">05. Jawatankuasa Pelaksana</button>
+            <button onclick="goToPage(6); toggleMobileMenu()" data-nav="6" class="nav-tab w-full text-left px-3 py-2 rounded-lg text-sm font-medium block">06. Penutup &amp; Sekalung Penghargaan</button>
+        </div>
+    </header>
+
+    <!-- Bekas Utama Majalah Interaktif (Menyokong Slide / Swipe) -->
+    <main id="magazine-swipe-area" class="relative z-10 flex-grow max-w-6xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8">
+
+        <!-- ===================================================================== -->
+        <!-- HALAMAN 1: KULIT HADAPAN MAJALAH RASMI                                -->
+        <!-- ===================================================================== -->
+        <section id="page-1" class="magazine-page active">
+            <div class="ceremonial-frame royal-songket-bg rounded-3xl p-6 sm:p-10 md:p-14 text-center shadow-royal-card relative overflow-hidden">
+                <!-- Ornamen Awan Larat Melayu Penjuru -->
+                <svg class="w-24 h-24 sm:w-36 sm:h-36 text-amberGold-400/50 absolute top-0 left-0 pointer-events-none" viewBox="0 0 160 160" fill="none">
+                    <path d="M0 0 H150 C120 12 95 10 75 30 C55 50 65 80 40 95 C20 107 10 125 0 150 Z" fill="currentColor" fill-opacity="0.14"/>
+                    <path d="M12 140 C12 75 28 35 75 22 C105 14 128 14 148 8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M24 115 C28 70 48 45 88 36 C105 32 118 28 130 22" stroke="currentColor" stroke-width="1.3" stroke-dasharray="4 3"/>
+                    <circle cx="52" cy="52" r="5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="88" cy="36" r="3.5" fill="currentColor"/>
+                </svg>
+                <svg class="w-24 h-24 sm:w-36 sm:h-36 text-amberGold-400/50 absolute top-0 right-0 scale-x-[-1] pointer-events-none" viewBox="0 0 160 160" fill="none">
+                    <path d="M0 0 H150 C120 12 95 10 75 30 C55 50 65 80 40 95 C20 107 10 125 0 150 Z" fill="currentColor" fill-opacity="0.14"/>
+                    <path d="M12 140 C12 75 28 35 75 22 C105 14 128 14 148 8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <circle cx="52" cy="52" r="5" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <svg class="w-24 h-24 sm:w-36 sm:h-36 text-amberGold-400/50 absolute bottom-0 left-0 scale-y-[-1] pointer-events-none" viewBox="0 0 160 160" fill="none">
+                    <path d="M0 0 H150 C120 12 95 10 75 30 C55 50 65 80 40 95 C20 107 10 125 0 150 Z" fill="currentColor" fill-opacity="0.14"/>
+                    <path d="M12 140 C12 75 28 35 75 22 C105 14 128 14 148 8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </svg>
+                <svg class="w-24 h-24 sm:w-36 sm:h-36 text-amberGold-400/50 absolute bottom-0 right-0 scale-[-1] pointer-events-none" viewBox="0 0 160 160" fill="none">
+                    <path d="M0 0 H150 C120 12 95 10 75 30 C55 50 65 80 40 95 C20 107 10 125 0 150 Z" fill="currentColor" fill-opacity="0.14"/>
+                    <path d="M12 140 C12 75 28 35 75 22 C105 14 128 14 148 8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </svg>
+
+                <!-- Jalur Penerbitan Majalah Editorial -->
+                <div class="inline-flex items-center space-x-2 px-4 py-1 rounded-full bg-amberGold-500/10 border border-amberGold-400/35 text-amberGold-300 text-[11px] font-semibold tracking-[0.22em] uppercase mb-5">
+                    <span>Penerbitan Khas Istiadat</span>
+                    <span>&bull;</span>
+                    <span>Edisi Zon Sarawak</span>
+                </div>
+
+                <!-- Logo Rasmi Jabatan Imigresen Malaysia -->
+                <div class="mx-auto w-24 h-24 sm:w-28 sm:h-28 mb-4 relative flex items-center justify-center">
+                    <div class="absolute inset-0 rounded-full bg-amberGold-400/20 blur-xl"></div>
+                    <img src="https://lh3.googleusercontent.com/d/1hm_WpQ7aFhmDtvz-udz-Pve2YGh2F265=w400" alt="Logo Rasmi Jabatan Imigresen Malaysia" referrerpolicy="no-referrer" class="w-full h-full object-contain relative z-10 drop-shadow-[0_6px_16px_rgba(0,0,0,0.9)]">
+                </div>
+
+                <!-- Tajuk Istiadat (Kaligrafi + Bold Emas + Subtajuk) -->
+                <p class="font-script text-3xl sm:text-5xl text-ivory/95 tracking-wide -mb-1 drop-shadow">
+                    Majlis Penganugerahan
+                </p>
+
+                <h1 class="font-cinzel text-3xl sm:text-5xl md:text-6xl font-black text-amber-gold-gradient leading-tight tracking-wide uppercase">
+                    PINGAT PERKHIDMATAN
+                </h1>
+
+                <h2 class="font-sans text-lg sm:text-2xl md:text-3xl font-extrabold text-ivory tracking-[0.12em] uppercase mt-2">
+                    JABATAN IMIGRESEN MALAYSIA
+                </h2>
+                <p class="font-cinzel text-sm sm:text-lg font-bold text-amberGold-300 tracking-[0.2em] uppercase mt-1">
+                    Zon Sarawak Tahun 2026
+                </p>
+
+                <!-- Garis Pemisah Mewah -->
+                <div class="flex items-center justify-center space-x-3 my-6">
+                    <span class="h-px w-16 sm:w-28 bg-gradient-to-r from-transparent to-amberGold-400"></span>
+                    <i class="fa-solid fa-diamond text-amberGold-400 text-[10px]"></i>
+                    <span class="h-px w-16 sm:w-28 bg-gradient-to-l from-transparent to-amberGold-400"></span>
+                </div>
+
+                <!-- Disempurnakan Oleh -->
+                <div class="max-w-xl mx-auto bg-obsidian-950/75 border border-amberGold-400/30 rounded-2xl px-6 py-4 mb-6 shadow-inner">
+                    <span class="font-playfair italic text-xs sm:text-sm text-amberGold-300 tracking-widest uppercase block">
+                        Disempurnakan Oleh:
+                    </span>
+                    <strong class="font-cinzel text-base sm:text-xl font-bold text-ivory tracking-wide block mt-1">
+                        YBHG. DATO&rsquo; ZAKARIA BIN SHAABAN
+                    </strong>
+                    <span class="text-xs sm:text-sm text-slate-300 uppercase tracking-wider font-medium">
+                        Ketua Pengarah Imigresen Malaysia
+                    </span>
+                </div>
+
+                <!-- Tarikh, Masa & Tempat -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm font-semibold text-amberGold-300 tracking-wider uppercase mb-6">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-regular fa-calendar text-amberGold-400"></i>
+                        <span>24 November 2026 (Selasa)</span>
+                    </div>
+                    <span class="hidden sm:inline text-amberGold-500">&bull;</span>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-regular fa-clock text-amberGold-400"></i>
+                        <span>8.00 Pagi &ndash; Selesai</span>
+                    </div>
+                    <span class="hidden sm:inline text-amberGold-500">&bull;</span>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-location-dot text-amberGold-400"></i>
+                        <span>Pusat Konvensyen CIDB Kuching</span>
+                    </div>
+                </div>
+
+                <!-- Logo Malaysia MADANI & Visit Malaysia Bersebelahan + Cogan Kata Tengah -->
+                <div class="flex flex-col items-center justify-center mb-8">
+                    <div class="flex items-center justify-center space-x-5 sm:space-x-8 bg-obsidian-950/55 px-6 py-3 rounded-2xl border border-amberGold-400/20">
+                        <img src="https://lh3.googleusercontent.com/d/1YLGv6IVr2BpfnwJIrNiA08Ly2Zg2t2vE=w300" alt="Malaysia MADANI" referrerpolicy="no-referrer" onerror="this.style.display='none'" class="h-10 sm:h-12 object-contain">
+                        <div class="h-8 w-px bg-amberGold-400/30"></div>
+                        <img src="https://lh3.googleusercontent.com/d/1l7mZ-hRjh-IFGqGFmJYosRlOFbksNT3_=w300" alt="Visit Malaysia" referrerpolicy="no-referrer" onerror="this.style.display='none'" class="h-10 sm:h-12 object-contain">
+                    </div>
+                    <p class="font-playfair italic text-xs sm:text-sm text-amberGold-200/90 tracking-[0.25em] uppercase text-center mt-3">
+                        INTEGRITI, PROFESIONAL, MESRA
+                    </p>
+                </div>
+
+                <!-- Butang Mula Membaca & Petunjuk Slide -->
+                <div class="flex flex-col items-center space-y-3">
+                    <button onclick="goToPage(2)" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-amberGold-600 via-amberGold-400 to-amberGold-300 text-obsidian-950 font-extrabold text-xs sm:text-sm tracking-wider uppercase shadow-gold-glow hover:scale-[1.02] active:scale-[0.99] transition flex items-center space-x-3">
+                        <span>Selak Majalah Digital</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <span class="text-[11px] text-slate-400 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-hand-pointer text-amberGold-400/80"></i>
+                        <span>Tip: Leret (slide) ke kiri/kanan atau guna butang navigasi di bawah</span>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- HALAMAN 2: UCAPAN PENGHARGAAN & ATUR CARA MAJLIS                      -->
+        <!-- ===================================================================== -->
+        <section id="page-2" class="magazine-page">
+            <div class="mb-6 flex flex-col sm:flex-row sm:items-end justify-between border-b border-amberGold-400/25 pb-4">
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-amberGold-400">Halaman 02 &bull; Penghargaan &amp; Protokol</span>
+                    <h2 class="font-cinzel text-2xl sm:text-3xl font-bold text-ivory mt-1">Sekapur Sirih &amp; Atur Cara Majlis</h2>
+                </div>
+                <span class="text-xs text-amberGold-200/80 mt-2 sm:mt-0 italic font-playfair">"Setia Berjasa, Teguh Berbakti"</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
+                <!-- Kolum Kiri: Potret Rasmi YBhg. Dato' KP & Ucapan Umum (Tanpa Tajuk Perutusan) -->
+                <div class="lg:col-span-5 bg-obsidian-900/95 ceremonial-frame rounded-2xl p-6 sm:p-7 flex flex-col justify-between">
+                    <div>
+                        <!-- Potret Rasmi YBhg. Dato' KP -->
+                        <div class="relative mx-auto w-52 sm:w-60 mb-5 rounded-2xl p-1.5 bg-gradient-to-b from-amberGold-300 via-amberGold-500 to-obsidian-900 shadow-gold-glow">
+                            <div class="rounded-xl bg-gradient-to-b from-obsidian-800 to-obsidian-950 overflow-hidden pt-3 px-2 flex justify-center">
+                                <img src="https://lh3.googleusercontent.com/d/1lRd_WuJlzvT7I5Fd8Iky6EkZ29tvsd3Z=w600" alt="YBhg. Dato' Zakaria bin Shaaban" referrerpolicy="no-referrer" class="w-full h-64 sm:h-72 object-contain object-bottom drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)]">
+                            </div>
+                        </div>
+
+                        <div class="text-center mb-5 pb-4 border-b border-amberGold-400/25">
+                            <h3 class="font-cinzel text-base sm:text-lg font-bold text-amberGold-200 leading-snug">
+                                YBHG. DATO&rsquo; ZAKARIA BIN SHAABAN
+                            </h3>
+                            <p class="text-xs text-slate-300 font-semibold uppercase tracking-wider mt-1">
+                                Ketua Pengarah Imigresen Malaysia
+                            </p>
+                        </div>
+
+                        <!-- Ucapan Umum Tahniah & Syabas Tanpa Tajuk Perutusan -->
+                        <div class="space-y-3.5 text-sm text-slate-200 leading-relaxed text-justify selectable-text">
+                            <p class="font-playfair italic text-amberGold-200 text-base">
+                                Assalamualaikum Warahmatullahi Wabarakatuh dan Salam Malaysia MADANI.
+                            </p>
+                            <p>
+                                Setinggi-tinggi ucapan <strong class="text-amberGold-300">tahniah dan syabas</strong> dizahirkan kepada seluruh warga Jabatan Imigresen Malaysia Zon Sarawak yang diraikan dalam istiadat penuh bermakna pada hari ini.
+                            </p>
+                            <p>
+                                Penganugerahan <strong class="text-ivory">Pingat Perkhidmatan Berjasa (30 Tahun)</strong> dan <strong class="text-ivory">Pingat Perkhidmatan Setia (25 Tahun)</strong> merupakan manifestasi penghargaan tertinggi jabatan atas kesetiaan, pengorbanan, serta disiplin jitu yang telah dicurahkan demi mempertahankan kedaulatan dan keselamatan pintu masuk negara.
+                            </p>
+                            <p>
+                                Semoga pengiktirafan ini terus menyuntik semangat kecemerlangan berterusan dan menjadi teladan unggul kepada seluruh warga kerja Imigresen.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-amberGold-400/20 text-center">
+                        <span class="font-cinzel text-[11px] tracking-[0.22em] text-amberGold-400 uppercase">
+                            Integriti &bull; Profesional &bull; Mesra
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Kolum Kanan: Atur Cara Rasmi (Mengikut Jadual Cadangan Tuan) -->
+                <div class="lg:col-span-7 bg-obsidian-900/95 border border-amberGold-400/30 rounded-2xl p-6 sm:p-7">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-5 pb-3 border-b border-amberGold-400/20">
+                        <div class="flex items-center space-x-2.5">
+                            <div class="w-9 h-9 rounded-lg bg-amberGold-400/15 flex items-center justify-center text-amberGold-400">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-cinzel text-base sm:text-lg font-bold text-amberGold-200">Atur Cara Majlis</h3>
+                                <p class="text-xs text-slate-400">24 November 2026 &bull; Pusat Konvensyen CIDB Kuching</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-amberGold-500/15 border border-amberGold-400/30 text-amberGold-300 text-[11px] font-semibold">
+                            Iringan: Kumpulan Simfoni Tradisional (SMKMJ)
+                        </span>
+                    </div>
+
+                    <!-- Garis Masa Atur Cara -->
+                    <div class="relative pl-5 border-l-2 border-amberGold-400/40 space-y-2.5 max-h-[560px] overflow-y-auto pr-2">
+                        <div class="relative bg-obsidian-800/75 rounded-xl px-4 py-2.5 border border-slate-700/60">
+                            <span class="absolute -left-[25px] top-3.5 w-2.5 h-2.5 rounded-full bg-amberGold-400"></span>
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                <span class="text-xs font-extrabold text-amberGold-400 w-24 shrink-0">7.15 PAGI</span>
+                                <span class="text-xs sm:text-sm font-semibold text-ivory flex-grow">Ketibaan dan Pendaftaran Penerima Pingat</span>
+                            </div>
+                        </div>
+
+                        <div class="relative bg-obsidian-800/75 rounded-xl px-4 py-2.5 border border-slate-700/60">
+                            <span class="absolute -left-[25px] top-3.5 w-2.5 h-2.5 rounded-full bg-amberGold-400"></span>
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                <span class="text-xs font-extrabold text-amberGold-400 w-24 shrink-0">7.45 PAGI</span>
+                                <span class="text-xs sm:text-sm font-semibold text-ivory flex-grow">Ketibaan Tetamu Jemputan dan Ketua-Ketua Bahagian</span>
+                            </div>
+                        </div>
+
+                        <div class="relative bg-obsidian-800/75 rounded-xl px-4 py-2.5 border border-slate-700/60">
+                            <span class="absolute -left-[25px] top-3.5 w-2.5 h-2.5 rounded-full bg-amberGold-400"></span>
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                <span class="text-xs font-extrabold text-amberGold-400 w-24 shrink-0">8.00 PAGI</span>
+                                <span class="text-xs sm:text-sm font-semibold text-ivory flex-grow">Ketibaan YBhg. Datuk Haji Abdul Halim bin Abang Naili, Pengarah Imigresen Negeri Sarawak</span>
+                            </div>
+                        </div>
+
+                        <div class="relative bg-obsidian-800/75 rounded-xl px-4 py-2.5 border border-slate-700/60">
+                            <span class="absolute -left-[25px] top-3.5 w-2.5 h-2.5 rounded-full bg-amberGold-400"></span>
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                <span class="text-xs font-extrabold text-amberGold-400 w-24 shrink-0">8.15 PAGI</span>
+                                <span class="text-xs sm:text-sm font-semibold text-ivory flex-grow">Ketibaan Timbalan-Timbalan Ketua Pengarah Imigresen</span>
+                            </div>
+                        </div>
+
+                        <div class="relative bg-gradient-to-r from-amberGold-500/20 to-obsidian-800/90 rounded-xl px-4 py-3 border border-amberGold-400/50">
+                            <span class="absolute -left-[26px] top-4 w-3 h-3 rounded-full bg-amberGold-300 shadow-gold-glow"></span>
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                <span class="text-xs font-extrabold text-amberGold-300 w-24 shrink-0">8.30 PAGI</span>
+                                <span class="text-xs sm:text-sm font-bold text-amberGold-100 flex-grow">Ketibaan YBhg. Dato&rsquo; Zakaria bin Shaaban, Ketua Pengarah Imigresen Malaysia</span>
+                            </div>
+                        </div>
+
+                        <div class="relative bg-obsidian-800/55 rounded-xl px-4 py-2.5 border border-slate-800 space-y-2 text-xs sm:text-sm text-slate-200">
+                            <span class="absolute -left-[25px] top-4 w-2.5 h-2.5 rounded-full bg-amberGold-500"></span>
+                            <div class="flex items-start space-x-2.5"><i class="fa-solid fa-caret-right text-amberGold-400 mt-1"></i><span>Kawad Kawalan Sukuan dan &lsquo;Sword Bearer&rsquo;</span></div>
+                            <div class="flex items-start space-x-2.5"><i class="fa-solid fa-caret-right text-amberGold-400 mt-1"></i><span>Nyanyian Lagu Negaraku dan Lagu Imigresen Perkasa</span></div>
+                            <div class="flex items-start space-x-2.5"><i class="fa-solid fa-caret-right text-amberGold-400 mt-1"></i><span>Tayangan Montaj Istiadat</span></div>
+                            <div class="flex items-start space-x-2.5"><i class="fa-solid fa-caret-right text-amberGold-400 mt-1"></i><span>Pengisytiharan Permulaan Istiadat Penganugerahan Pingat</span></div>
+                        </div>
+
+                        <div class="relative bg-gradient-to-r from-amberGold-500/20 to-obsidian-800/90 rounded-xl px-4 py-3 border border-amberGold-400/50 space-y-1.5">
+                            <span class="absolute -left-[26px] top-4 w-3 h-3 rounded-full bg-amberGold-300 shadow-gold-glow"></span>
+                            <div class="flex items-start space-x-2.5 text-xs sm:text-sm font-bold text-amberGold-100">
+                                <i class="fa-solid fa-medal text-amberGold-400 mt-1"></i>
+                                <span>Penyampaian Pingat Perkhidmatan Berjasa (30 Tahun)</span>
+                            </div>
+                            <div class="flex items-start space-x-2.5 text-xs sm:text-sm font-bold text-amberGold-100">
+                                <i class="fa-solid fa-award text-amberGold-400 mt-1"></i>
+                                <span>Penyampaian Pingat Perkhidmatan Setia (25 Tahun)</span>
+                            </div>
+                        </div>
+
+                        <div class="relative bg-obsidian-800/55 rounded-xl px-4 py-2.5 border border-slate-800 space-y-2 text-xs sm:text-sm text-slate-200">
+                            <span class="absolute -left-[25px] top-4 w-2.5 h-2.5 rounded-full bg-amberGold-500"></span>
+                            <div class="flex items-start space-x-2.5"><i class="fa-solid fa-caret-right text-amberGold-400 mt-1"></i><span>Ucapan YBhg. Dato&rsquo; Ketua Pengarah Imigresen Malaysia</span></div>
+                            <div class="flex items-start space-x-2.5"><i class="fa-solid fa-caret-right text-amberGold-400 mt-1"></i><span>Bacaan Doa</span></div>
+                            <div class="flex items-start space-x-2.5"><i class="fa-solid fa-caret-right text-amberGold-400 mt-1"></i><span>Pengisytiharan Penangguhan Istiadat Penganugerahan Pingat</span></div>
+                            <div class="flex items-start space-x-2.5"><i class="fa-solid fa-caret-right text-amberGold-400 mt-1"></i><span>Sesi Bergambar Kenangan</span></div>
+                            <div class="flex items-start space-x-2.5"><i class="fa-solid fa-caret-right text-amberGold-400 mt-1"></i><span>Jamuan Makan Tengah Hari &amp; Bersurai</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- HALAMAN 3: KETERANGAN PINGAT PPIM & INFOGRAFIK STATISTIK 144 PENERIMA -->
+        <!-- ===================================================================== -->
+        <section id="page-3" class="magazine-page">
+            <div class="mb-6 flex flex-col sm:flex-row sm:items-end justify-between border-b border-amberGold-400/25 pb-4">
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-amberGold-400">Halaman 03 &bull; Darjah &amp; Kebesaran Jabatan</span>
+                    <h2 class="font-cinzel text-2xl sm:text-3xl font-bold text-ivory mt-1">Pengenalan Pingat &amp; Statistik 2026</h2>
+                </div>
+                <span class="text-xs text-slate-400 mt-2 sm:mt-0">Pingat Perkhidmatan Jabatan Imigresen Malaysia (PPIM)</span>
+            </div>
+
+            <!-- Keterangan Rasmi PPIM -->
+            <div class="bg-obsidian-900/90 border border-amberGold-400/25 rounded-2xl p-5 mb-6 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <p>
+                    <strong class="text-amberGold-300">Pingat Perkhidmatan Jabatan Imigresen Malaysia (PPIM)</strong> dizahirkan sebagai pengiktirafan berprestij jabatan kepada pegawai dan kakitangan yang telah mencurahkan khidmat bakti cemerlang serta kesetiaan tidak berbelah bahagi dalam tempoh perkhidmatan <strong class="text-ivory">25 tahun (Jubli Perak)</strong> dan <strong class="text-ivory">30 tahun (Jubli Emas)</strong>.
+                </p>
+            </div>
+
+            <!-- Perbandingan Dua Pingat -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-7">
+                <!-- KAD 1: PINGAT PERKHIDMATAN BERJASA (30 TAHUN) - PPB -->
+                <div class="bg-obsidian-900/95 ceremonial-frame rounded-2xl p-6 flex flex-col justify-between hover:shadow-gold-glow transition duration-300">
+                    <div>
+                        <div class="flex flex-col sm:flex-row items-center gap-5 mb-5">
+                            <!-- Ilustrasi Pingat 30 Tahun (Jubli Emas) -->
+                            <div class="w-28 h-40 shrink-0 flex items-center justify-center bg-obsidian-950/90 rounded-xl border border-amberGold-400/30 p-2">
+                                <svg viewBox="0 0 140 200" class="w-full h-full drop-shadow-[0_6px_12px_rgba(0,0,0,0.9)]">
+                                    <defs>
+                                        <linearGradient id="medalGold30" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#FEF08A"/>
+                                            <stop offset="50%" stop-color="#F59E0B"/>
+                                            <stop offset="100%" stop-color="#B45309"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Reben Biru Gelap, Merah & Kuning Emas -->
+                                    <polygon points="42,10 98,10 92,92 70,105 48,92" fill="#1E3A8A"/>
+                                    <rect x="48" y="10" width="8" height="84" fill="#DC2626"/>
+                                    <rect x="84" y="10" width="8" height="84" fill="#DC2626"/>
+                                    <rect x="65" y="10" width="10" height="92" fill="#FACC15"/>
+                                    <rect x="38" y="8" width="64" height="6" rx="2" fill="#F59E0B"/>
+                                    <circle cx="70" cy="107" r="6" fill="none" stroke="#F59E0B" stroke-width="3"/>
+                                    <!-- Bintang Kebesaran 8 Bucu -->
+                                    <polygon points="70,106 80,126 102,126 86,140 94,162 70,150 46,162 54,140 38,126 60,126" fill="url(#medalGold30)" stroke="#FEF08A" stroke-width="1.5"/>
+                                    <circle cx="70" cy="144" r="24" fill="#090D16" stroke="#F59E0B" stroke-width="2"/>
+                                    <text x="70" y="142" text-anchor="middle" fill="#FEF08A" font-family="Cinzel, serif" font-weight="800" font-size="16">30</text>
+                                    <text x="70" y="154" text-anchor="middle" fill="#F59E0B" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" font-size="6.5" letter-spacing="1">TAHUN</text>
+                                </svg>
+                            </div>
+
+                            <div class="text-center sm:text-left">
+                                <span class="px-3 py-1 rounded-full bg-amberGold-500/20 border border-amberGold-400/40 text-amberGold-300 text-xs font-bold">
+                                    JUBLI EMAS &bull; KOD: PPB (30 TAHUN)
+                                </span>
+                                <h3 class="font-cinzel text-lg sm:text-xl font-bold text-amberGold-200 mt-2">
+                                    Pingat Perkhidmatan Berjasa (PPB)
+                                </h3>
+                                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                                    Dianugerahkan kepada pegawai yang telah menyempurnakan tempoh perkhidmatan genap <strong class="text-ivory">30 tahun atau lebih</strong> dengan rekod perkhidmatan terpuji, berintegriti tinggi, serta bebas daripada sebarang tindakan tatatertib.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-obsidian-800/70 rounded-xl p-3.5 border border-amberGold-400/20 text-xs space-y-2">
+                            <div class="flex items-start space-x-2">
+                                <i class="fa-solid fa-crown text-amberGold-400 mt-0.5"></i>
+                                <span class="text-slate-300"><strong class="text-ivory">Simbolisme Jubli Emas:</strong> Melambangkan kematangan kepimpinan, pengorbanan luar biasa, dan kesetiaan tiga dekad mempertahankan kedaulatan negara.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KAD 2: PINGAT PERKHIDMATAN SETIA (25 TAHUN) - PPS -->
+                <div class="bg-obsidian-900/95 ceremonial-frame rounded-2xl p-6 flex flex-col justify-between hover:shadow-gold-glow transition duration-300">
+                    <div>
+                        <div class="flex flex-col sm:flex-row items-center gap-5 mb-5">
+                            <!-- Ilustrasi Pingat 25 Tahun (Jubli Perak) -->
+                            <div class="w-28 h-40 shrink-0 flex items-center justify-center bg-obsidian-950/90 rounded-xl border border-amberGold-400/30 p-2">
+                                <svg viewBox="0 0 140 200" class="w-full h-full drop-shadow-[0_6px_12px_rgba(0,0,0,0.9)]">
+                                    <defs>
+                                        <linearGradient id="medalSilver25" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#F8FAFC"/>
+                                            <stop offset="50%" stop-color="#CBD5E1"/>
+                                            <stop offset="100%" stop-color="#64748B"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <polygon points="42,10 98,10 92,92 70,105 48,92" fill="#1E3A8A"/>
+                                    <rect x="52" y="10" width="6" height="86" fill="#E2E8F0"/>
+                                    <rect x="82" y="10" width="6" height="86" fill="#E2E8F0"/>
+                                    <rect x="68" y="10" width="4" height="94" fill="#F59E0B"/>
+                                    <rect x="38" y="8" width="64" height="6" rx="2" fill="#CBD5E1"/>
+                                    <circle cx="70" cy="107" r="6" fill="none" stroke="#CBD5E1" stroke-width="3"/>
+                                    <circle cx="70" cy="148" r="38" fill="url(#medalSilver25)" stroke="#F59E0B" stroke-width="2.5"/>
+                                    <circle cx="70" cy="148" r="30" fill="#090D16" stroke="#CBD5E1" stroke-width="1.5"/>
+                                    <text x="70" y="145" text-anchor="middle" fill="#F8FAFC" font-family="Cinzel, serif" font-weight="800" font-size="18">25</text>
+                                    <text x="70" y="159" text-anchor="middle" fill="#FCD34D" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" font-size="7" letter-spacing="1">TAHUN</text>
+                                </svg>
+                            </div>
+
+                            <div class="text-center sm:text-left">
+                                <span class="px-3 py-1 rounded-full bg-sky-500/20 border border-sky-400/40 text-sky-300 text-xs font-bold">
+                                    JUBLI PERAK &bull; KOD: PPS (25 TAHUN)
+                                </span>
+                                <h3 class="font-cinzel text-lg sm:text-xl font-bold text-amberGold-200 mt-2">
+                                    Pingat Perkhidmatan Setia (PPS)
+                                </h3>
+                                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                                    Dianugerahkan kepada pegawai yang telah menyempurnakan tempoh perkhidmatan genap <strong class="text-ivory">25 tahun</strong> secara berterusan dengan penuh dedikasi, profesionalisme, dan prestasi kerja cemerlang.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-obsidian-800/70 rounded-xl p-3.5 border border-amberGold-400/20 text-xs space-y-2">
+                            <div class="flex items-start space-x-2">
+                                <i class="fa-solid fa-shield-halved text-sky-400 mt-0.5"></i>
+                                <span class="text-slate-300"><strong class="text-ivory">Simbolisme Jubli Perak:</strong> Mencerminkan keteguhan prinsip, keutuhan integriti, dan komitmen tinggi dalam menyampaikan perkhidmatan terbaik kepada rakyat.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Infografik Statistik Penerima Zon Sarawak 2026 (144 Penerima: 72 PPB & 72 PPS) -->
+            <div class="bg-obsidian-900/95 border border-amberGold-400/35 rounded-2xl p-6 sm:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-2">
+                    <h3 class="font-cinzel text-lg font-bold text-amberGold-200 flex items-center space-x-2.5">
+                        <i class="fa-solid fa-chart-column text-amberGold-400"></i>
+                        <span>Infografik Penerima Pingat Zon Sarawak 2026</span>
+                    </h3>
+                    <span class="text-xs text-slate-400">Pecahan Rasmi Mengikut Kategori Pingat</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <!-- Jumlah Keseluruhan -->
+                    <div class="bg-gradient-to-br from-amberGold-500/20 to-obsidian-800 border border-amberGold-400/50 rounded-2xl p-5 text-center shadow-gold-glow">
+                        <span class="text-xs font-bold uppercase tracking-widest text-amberGold-300 block">Jumlah Keseluruhan</span>
+                        <span class="font-cinzel text-4xl sm:text-5xl font-black text-ivory my-2 block">144</span>
+                        <span class="text-xs text-slate-300">Pegawai Diraikan Zon Sarawak</span>
+                    </div>
+
+                    <!-- PPB 30 Tahun -->
+                    <div class="bg-obsidian-800/90 border border-amberGold-400/30 rounded-2xl p-5 text-center">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amberGold-400 block">Pingat Perkhidmatan Berjasa (PPB)</span>
+                        <span class="font-cinzel text-4xl sm:text-5xl font-black text-amberGold-300 my-2 block">72</span>
+                        <span class="text-xs text-slate-300">30 Tahun Berkhidmat (50%)</span>
+                    </div>
+
+                    <!-- PPS 25 Tahun -->
+                    <div class="bg-obsidian-800/90 border border-sky-400/30 rounded-2xl p-5 text-center">
+                        <span class="text-xs font-bold uppercase tracking-wider text-sky-300 block">Pingat Perkhidmatan Setia (PPS)</span>
+                        <span class="font-cinzel text-4xl sm:text-5xl font-black text-sky-300 my-2 block">72</span>
+                        <span class="text-xs text-slate-300">25 Tahun Berkhidmat (50%)</span>
+                    </div>
+                </div>
+
+                <!-- Bar Perbandingan Visual 50% / 50% -->
+                <div>
+                    <div class="flex justify-between text-xs font-semibold mb-1.5">
+                        <span class="text-amberGold-300">PPB (30 Tahun): 72 Penerima (50%)</span>
+                        <span class="text-sky-300">PPS (25 Tahun): 72 Penerima (50%)</span>
+                    </div>
+                    <div class="w-full h-4 rounded-full bg-obsidian-950 overflow-hidden flex border border-amberGold-400/30 p-0.5">
+                        <div class="bg-gradient-to-r from-amberGold-600 to-amberGold-400 h-full rounded-l-full" style="width: 50%"></div>
+                        <div class="bg-gradient-to-r from-sky-500 to-sky-300 h-full rounded-r-full" style="width: 50%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- HALAMAN 4: DIREKTORI PENERIMA PINGAT (LIVE GOOGLE SHEETS + GAMBAR)    -->
+        <!-- ===================================================================== -->
+        <section id="page-4" class="magazine-page">
+            <div class="mb-6 flex flex-col sm:flex-row sm:items-end justify-between border-b border-amberGold-400/25 pb-4 gap-3">
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-amberGold-400">Halaman 04 &bull; Senarai Kehormat</span>
+                    <h2 class="font-cinzel text-2xl sm:text-3xl font-bold text-ivory mt-1">Direktori Penerima Pingat 2026</h2>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span id="data-source-badge" class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs flex items-center space-x-1.5">
+                        <i class="fa-solid fa-rotate fa-spin"></i>
+                        <span>Menyegerak Senarai Penerima...</span>
+                    </span>
+                    <button onclick="fetchRecipientsFromGoogleSheets()" title="Muat Semula Senarai" class="p-2 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 border border-amberGold-400/30 text-amberGold-300 text-xs transition">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bar Carian & Penapis Kategori Pingat -->
+            <div class="bg-obsidian-900/90 border border-amberGold-400/30 rounded-2xl p-4 sm:p-5 mb-6">
+                <div class="flex flex-col md:flex-row gap-4 justify-between">
+                    <div class="relative flex-grow">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-amberGold-400/75 text-sm"></i>
+                        <input type="text" id="search-recipient" oninput="filterRecipients()" placeholder="Cari nama penerima, jawatan / gred, atau kategori pingat..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-obsidian-950 border border-amberGold-400/30 text-sm text-ivory placeholder-slate-400 focus:outline-none focus:border-amberGold-400">
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 shrink-0">
+                        <button onclick="setCategoryFilter('ALL')" data-filter="ALL" class="filter-btn active px-4 py-2 rounded-xl text-xs font-bold bg-amberGold-400 text-obsidian-950 transition">
+                            Semua (<span id="count-all">0</span>)
+                        </button>
+                        <button onclick="setCategoryFilter('30')" data-filter="30" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-obsidian-800 text-slate-200 border border-amberGold-400/25 hover:border-amberGold-400 transition">
+                            PPB 30 Tahun (<span id="count-30">0</span>)
+                        </button>
+                        <button onclick="setCategoryFilter('25')" data-filter="25" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-obsidian-800 text-slate-200 border border-amberGold-400/25 hover:border-amberGold-400 transition">
+                            PPS 25 Tahun (<span id="count-25">0</span>)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Kad Penerima (Nama, Jawatan Gred, Pingat, Tahun Khidmat, Gambar) -->
+            <div id="recipients-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Dijana secara automatik daripada Google Sheets -->
+            </div>
+
+            <!-- Mesej Tiada Rekod -->
+            <div id="no-recipients-msg" class="hidden text-center py-12 bg-obsidian-900/60 rounded-2xl border border-amberGold-400/20">
+                <i class="fa-regular fa-folder-open text-3xl text-amberGold-400/50 mb-2"></i>
+                <p class="text-slate-300 text-sm">Tiada rekod penerima pingat yang sepadan dengan carian anda.</p>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- HALAMAN 5: JAWATANKUASA PELAKSANA ISTIADAT (LIVE GOOGLE SHEETS)        -->
+        <!-- ===================================================================== -->
+        <section id="page-5" class="magazine-page">
+            <div class="mb-6 flex flex-col sm:flex-row sm:items-end justify-between border-b border-amberGold-400/25 pb-4 gap-3">
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-amberGold-400">Halaman 05 &bull; Urus Setia &amp; Pelaksana</span>
+                    <h2 class="font-cinzel text-2xl sm:text-3xl font-bold text-ivory mt-1">Jawatankuasa Pelaksana Istiadat</h2>
+                </div>
+                <span id="ajk-sync-badge" class="text-xs text-amberGold-200/80">Jabatan Imigresen Malaysia Zon Sarawak</span>
+            </div>
+
+            <!-- 3 Jawatankuasa Induk Utama -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+                <div class="bg-obsidian-900/95 ceremonial-frame rounded-2xl p-5 text-center">
+                    <span class="inline-block px-3 py-0.5 rounded-full bg-amberGold-500/20 text-amberGold-300 text-[11px] font-bold uppercase tracking-wider mb-2">Penaung</span>
+                    <h3 class="font-cinzel text-base font-bold text-ivory">YBhg. Dato&rsquo; Zakaria bin Shaaban</h3>
+                    <p class="text-xs text-slate-400 mt-1">Ketua Pengarah Imigresen Malaysia</p>
+                </div>
+
+                <div class="bg-obsidian-900/95 ceremonial-frame rounded-2xl p-5 text-center">
+                    <span class="inline-block px-3 py-0.5 rounded-full bg-amberGold-500/20 text-amberGold-300 text-[11px] font-bold uppercase tracking-wider mb-2">Pengerusi</span>
+                    <h3 class="font-cinzel text-base font-bold text-ivory">YBhg. Datuk Haji Abdul Halim bin Abang Naili</h3>
+                    <p class="text-xs text-slate-400 mt-1">Pengarah Imigresen Negeri Sarawak</p>
+                </div>
+
+                <div class="bg-obsidian-900/95 ceremonial-frame rounded-2xl p-5 text-center">
+                    <span class="inline-block px-3 py-0.5 rounded-full bg-amberGold-500/20 text-amberGold-300 text-[11px] font-bold uppercase tracking-wider mb-2">Penyelaras</span>
+                    <h3 class="font-cinzel text-sm sm:text-base font-bold text-ivory leading-snug">
+                        CIPS JIM Putrajaya, CIPS JIM Sarawak, Bahagian C dan Bahagian A
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">Urus Setia Induk Istiadat 2026</p>
+                </div>
+            </div>
+
+            <!-- Senarai Jawatankuasa Kerja (Sedia Dikemas Kini Secara Live dari Google Drive / Sheets) -->
+            <div id="ajk-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Dijana oleh JavaScript (Data Live Google Sheets atau Sandaran Rasmi) -->
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- HALAMAN 6: PENUTUP & SEKALUNG PENGHARGAAN                             -->
+        <!-- ===================================================================== -->
+        <section id="page-6" class="magazine-page">
+            <div class="ceremonial-frame royal-songket-bg rounded-3xl p-6 sm:p-10 md:p-12 shadow-royal-card relative overflow-hidden">
+                <div class="text-center max-w-3xl mx-auto">
+                    <span class="inline-block px-4 py-1 rounded-full bg-amberGold-500/15 border border-amberGold-400/35 text-amberGold-300 text-xs font-semibold tracking-[0.2em] uppercase mb-3">
+                        Halaman 06 &bull; Penutup Majlis
+                    </span>
+                    <h2 class="font-cinzel text-2xl sm:text-4xl font-extrabold text-amber-gold-gradient mb-6">
+                        Sekalung Tahniah &amp; Penghargaan
+                    </h2>
+
+                    <!-- Karangan Rasmi Ucapan Tahniah & Terima Kasih -->
+                    <div class="space-y-4 text-sm sm:text-base text-slate-200 leading-relaxed text-justify bg-obsidian-950/75 border border-amberGold-400/25 rounded-2xl p-6 sm:p-8 mb-8 selectable-text">
+                        <p>
+                            Setinggi-tinggi ucapan <strong class="text-amberGold-300">tahniah dan syabas</strong> dirakamkan kepada kesemua <strong class="text-ivory">144 orang penerima</strong> <strong class="text-amberGold-200">Pingat Perkhidmatan Berjasa (30 Tahun)</strong> dan <strong class="text-amberGold-200">Pingat Perkhidmatan Setia (25 Tahun)</strong> Jabatan Imigresen Malaysia Zon Sarawak bagi tahun 2026. Sesungguhnya penganugerahan ini menjadi bukti pengiktirafan tertinggi jabatan terhadap kesetiaan, pengorbanan, serta kecemerlangan khidmat bakti yang telah dicurahkan sepanjang tempoh perkhidmatan.
+                        </p>
+                        <p>
+                            Jawatankuasa Pelaksana Istiadat turut merakamkan setinggi-tinggi penghargaan dan ucapan <strong class="text-amberGold-300">terima kasih</strong> kepada <strong class="text-ivory">YBhg. Dato&rsquo; Zakaria bin Shaaban</strong>, Ketua Pengarah Imigresen Malaysia, atas kesudian menyempurnakan majlis istiadat ini. Penghargaan tulus ikhlas juga ditujukan kepada Pengurusan Tertinggi Jabatan, <strong class="text-ivory">YBhg. Datuk Haji Abdul Halim bin Abang Naili</strong>, Pengarah Imigresen Negeri Sarawak, para tetamu kehormat, <strong class="text-ivory">Kumpulan Simfoni Tradisional (SMKMJ)</strong>, barisan jawatankuasa pelaksana, serta semua pihak yang telah berganding bahu menjayakan majlis penuh bersejarah ini.
+                        </p>
+                    </div>
+
+                    <!-- Dua Rangkap Pantun Istiadat -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto mb-8">
+                        <div class="bg-obsidian-900/90 border border-amberGold-400/35 rounded-2xl p-5 text-center relative">
+                            <i class="fa-solid fa-quote-left text-amberGold-400/30 text-2xl absolute top-3 left-4"></i>
+                            <p class="font-playfair italic text-sm sm:text-base text-amberGold-100 leading-relaxed">
+                                Haluan bahtera menuju muara,<br>
+                                Sarat muatan permata pilihan;<br>
+                                Tiga dekad berbakti setia,<br>
+                                Jasa dan budi tetap dikenang.
+                            </p>
+                        </div>
+
+                        <div class="bg-obsidian-900/90 border border-amberGold-400/35 rounded-2xl p-5 text-center relative">
+                            <i class="fa-solid fa-quote-left text-amberGold-400/30 text-2xl absolute top-3 left-4"></i>
+                            <p class="font-playfair italic text-sm sm:text-base text-amberGold-100 leading-relaxed">
+                                Indah berseri songket kencana,<br>
+                                Dipakai segak di hari mulia;<br>
+                                Terima kasih tidak terhingga,<br>
+                                Majlis gemilang berkat semua.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Penutup Rasmi & Butang Cetak / Kembali ke Kulit Hadapan -->
+                    <div class="pt-4 border-t border-amberGold-400/25 flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <button onclick="goToPage(1)" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-obsidian-800 hover:bg-obsidian-700 border border-amberGold-400/40 text-amberGold-200 text-xs sm:text-sm font-semibold transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>Kembali ke Kulit Hadapan</span>
+                        </button>
+                        <button onclick="printMagazine()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-amberGold-600 via-amberGold-400 to-amberGold-300 text-obsidian-950 text-xs sm:text-sm font-extrabold shadow-gold-glow hover:opacity-95 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Cetak Susunan Majalah (A4)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bar Kawalan Bawah Majalah -->
+    <footer id="bottom-controls" class="sticky bottom-0 z-30 bg-obsidian-950/95 backdrop-blur-md border-t border-amberGold-400/25 py-3 px-4">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <button id="prev-page-btn" onclick="prevPage()" class="px-3.5 sm:px-4 py-2 rounded-xl bg-obsidian-800 hover:bg-obsidian-700 disabled:opacity-40 disabled:pointer-events-none border border-amberGold-400/30 text-amberGold-200 text-xs sm:text-sm font-medium flex items-center space-x-2 transition">
+                <i class="fa-solid fa-chevron-left"></i>
+                <span class="hidden sm:inline">Sebelumnya</span>
+            </button>
+
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <div class="hidden sm:flex items-center space-x-1.5" id="page-dots">
+                    <button onclick="goToPage(1)" class="page-dot w-2.5 h-2.5 rounded-full bg-amberGold-400 transition-all"></button>
+                    <button onclick="goToPage(2)" class="page-dot w-2.5 h-2.5 rounded-full bg-slate-600 transition-all"></button>
+                    <button onclick="goToPage(3)" class="page-dot w-2.5 h-2.5 rounded-full bg-slate-600 transition-all"></button>
+                    <button onclick="goToPage(4)" class="page-dot w-2.5 h-2.5 rounded-full bg-slate-600 transition-all"></button>
+                    <button onclick="goToPage(5)" class="page-dot w-2.5 h-2.5 rounded-full bg-slate-600 transition-all"></button>
+                    <button onclick="goToPage(6)" class="page-dot w-2.5 h-2.5 rounded-full bg-slate-600 transition-all"></button>
+                </div>
+                <span class="text-xs font-cinzel text-amberGold-300 font-bold">
+                    Halaman <span id="current-page-num">1</span> / 6
+                </span>
+            </div>
+
+            <button id="next-page-btn" onclick="nextPage()" class="px-3.5 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-amberGold-600 to-amberGold-400 hover:opacity-95 disabled:opacity-40 disabled:pointer-events-none text-obsidian-950 text-xs sm:text-sm font-extrabold flex items-center space-x-2 transition">
+                <span class="hidden sm:inline">Seterusnya</span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast-box" class="fixed top-20 right-4 z-50 transform translate-x-[150%] transition-transform duration-300 max-w-sm bg-obsidian-800 border border-amberGold-400 text-ivory px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3">
+        <i class="fa-solid fa-circle-check text-amberGold-400 text-lg"></i>
+        <p id="toast-message" class="text-xs sm:text-sm font-medium">Pemberitahuan</p>
+    </div>
+
+    <!-- Elemen Audio Rasmi Gamelan (Google Drive Link Terkini) -->
+    <audio id="gamelan-audio-el" preload="auto" loop></audio>
+
+    <!-- ===================================================================== -->
+    <!-- SKRIP LENGKAP: GAMELAN, GOOGLE SHEETS LIVE, SWIPE & PARTIKEL EMAS     -->
+    <!-- ===================================================================== -->
+    <script>
+        // ID Rasmi Google Sheets & Audio Gamelan Tuan
+        const RECIPIENTS_SHEET_ID = "1mgJjSLj-zQttXgOftH7u-ZMNa8RtsJi1JcglnZ124is";
+        const AJK_SHEET_ID = "1b4f903JREu4K0PhwbAj0kLezZgBbybkK";
+        const GAMELAN_DRIVE_ID = "1zhOBk3VOJPo9xml9nb7Dz0Rte9HHymuq";
+
+        const GAMELAN_AUDIO_SOURCES = [
+            "https://drive.usercontent.google.com/download?id=" + GAMELAN_DRIVE_ID + "&export=download&confirm=t",
+            "https://docs.google.com/uc?export=download&confirm=t&id=" + GAMELAN_DRIVE_ID,
+            "https://drive.google.com/uc?export=download&id=" + GAMELAN_DRIVE_ID
+        ];
+
+        // Data Sandaran Penerima (Jika Google Sheets sedang memuatkan data)
+        const FALLBACK_RECIPIENTS = [
+            { nama: "Tuan Haji Mohamad bin Abdullah", jawatanGred: "Timbalan Penolong Pengarah Imigresen Kanan (KP38)", pingat: "Pingat Perkhidmatan Berjasa (PPB)", tahunKhidmat: "30 Tahun", urlGambar: "" },
+            { nama: "Puan Dayang Rosnah binti Awangku Omar", jawatanGred: "Timbalan Penolong Pengarah Imigresen Tinggi (KP32)", pingat: "Pingat Perkhidmatan Berjasa (PPB)", tahunKhidmat: "30 Tahun", urlGambar: "" },
+            { nama: "Encik Augustine Anak Nyambong", jawatanGred: "Pegawai Imigresen Tinggi (KP28)", pingat: "Pingat Perkhidmatan Setia (PPS)", tahunKhidmat: "25 Tahun", urlGambar: "" },
+            { nama: "Puan Siti Norhayati binti Bujang", jawatanGred: "Pegawai Imigresen Kanan (KP22)", pingat: "Pingat Perkhidmatan Setia (PPS)", tahunKhidmat: "25 Tahun", urlGambar: "" }
+        ];
+
+        // Data Sandaran Rasmi Jawatankuasa Pelaksana Istiadat (Tanpa Senarai Nama)
+        const FALLBACK_AJK_LIST = [
+            { jawatankuasa: "Jawatankuasa Protokol & Sambutan", tugas: "Menyelaras susunan tempat duduk VVIP, penerima pingat, serta protokol ketibaan dan sambutan tetamu kehormat." },
+            { jawatankuasa: "Jawatankuasa Istiadat & Pengurusan Penerima", tugas: "Menguruskan raptai penuh, susunan penerima pingat, dan tatacara penyampaian anugerah di pentas." },
+            { jawatankuasa: "Jawatankuasa Kawalan Kehormatan & Sword Bearer", tugas: "Menyelaras kawad kawalan sukuan, barisan sword bearer, dan tatacara perbarisan rasmi istiadat." },
+            { jawatankuasa: "Jawatankuasa Multimedia, Audio Visual & Montaj", tugas: "Menyediakan tayangan montaj istiadat, paparan skrin LED, sistem audio visual, dan majalah digital." },
+            { jawatankuasa: "Jawatankuasa Juruacara & Pembaca Doa", tugas: "Menyediakan teks pengacaraan rasmi istiadat, pengisytiharan nama penerima pingat, dan bacaan doa." },
+            { jawatankuasa: "Jawatankuasa Persiapan Dewan & Hiasan Pentas", tugas: "Memastikan susun atur dewan, hiasan pentas istiadat, dan kelengkapan logistik berada dalam keadaan sempurna." },
+            { jawatankuasa: "Jawatankuasa Pendaftaran & Cenderamata", tugas: "Menguruskan kaunter pendaftaran penerima pingat, edaran buku program, dan penyediaan cenderamata kenangan." },
+            { jawatankuasa: "Jawatankuasa Jamuan & Sajian", tugas: "Menyelaras menu dan aturan jamuan rasmi VVIP, tetamu jemputan, penerima pingat, serta petugas majlis." },
+            { jawatankuasa: "Jawatankuasa Persembahan Kebudayaan", tugas: "Menyelaras persembahan iringan muzik gamelan tradisional dan kebudayaan sepanjang berlangsungnya majlis." }
+        ];
+
+        let recipientsData = [];
+        let currentCategoryFilter = 'ALL';
+        let currentPage = 1;
+        const totalPages = 6;
+
+        // Status Muzik Gamelan
+        let gamelanPlaying = false;
+        let gamelanSrcIndex = 0;
+        let useSynthFallback = false;
+        let gamelanLoop = null;
+        let gamelanSynth = null;
+        let autoStartDone = false;
+
+        /**
+         * 1. PEMAIN AUDIO GAMELAN (LINK GOOGLE DRIVE + SANDARAN SINTESIS)
+         */
+        function initGamelanAudio() {
+            const audioEl = document.getElementById('gamelan-audio-el');
+            if (!audioEl) return;
+
+            audioEl.volume = 0.65;
+            audioEl.src = GAMELAN_AUDIO_SOURCES[0];
+
+            audioEl.addEventListener('error', function() {
+                gamelanSrcIndex++;
+                if (gamelanSrcIndex < GAMELAN_AUDIO_SOURCES.length) {
+                    audioEl.src = GAMELAN_AUDIO_SOURCES[gamelanSrcIndex];
+                    if (gamelanPlaying) {
+                        audioEl.play().catch(function() { switchToSynthGamelan(); });
+                    }
+                } else {
+                    switchToSynthGamelan();
+                }
+            });
+
+            // Cuba auto-play terus; jika pelayar menyekat tanpa klik, mainkan pada sentuhan pertama
+            audioEl.play().then(function() {
+                gamelanPlaying = true;
+                autoStartDone = true;
+                updateGamelanUI(true);
+            }).catch(function() {
+                const unlockAudio = function() {
+                    if (autoStartDone) return;
+                    autoStartDone = true;
+                    document.removeEventListener('click', unlockAudio);
+                    document.removeEventListener('touchstart', unlockAudio);
+                    startGamelanPlayback();
+                };
+                document.addEventListener('click', unlockAudio, { once: true });
+                document.addEventListener('touchstart', unlockAudio, { once: true });
+            });
+        }
+
+        function switchToSynthGamelan() {
+            useSynthFallback = true;
+            if (gamelanPlaying) {
+                startSynthGamelan();
+            }
+        }
+
+        function startSynthGamelan() {
+            if (typeof Tone === 'undefined') return;
+            if (!gamelanSynth) {
+                const reverb = new Tone.Reverb({ decay: 3.5, wet: 0.45 }).toDestination();
+                gamelanSynth = new Tone.PolySynth(Tone.FMSynth, {
+                    harmonicity: 3.01,
+                    modulationIndex: 4,
+                    oscillator: { type: "sine" },
+                    envelope: { attack: 0.01, decay: 1.6, sustain: 0.05, release: 1.8 }
+                }).connect(reverb);
+                gamelanSynth.volume.value = -14;
+            }
+            if (Tone.context.state !== 'running') {
+                Tone.start();
+            }
+            const pelogNotes = ["C4", "D4", "Eb4", "G4", "Ab4", "C5", "D5", "G4", "Eb4", "D4"];
+            let step = 0;
+            if (!gamelanLoop) {
+                gamelanLoop = new Tone.Loop(function(time) {
+                    const note = pelogNotes[step % pelogNotes.length];
+                    gamelanSynth.triggerAttackRelease(note, "2n", time);
+                    if (step % 4 === 0) {
+                        gamelanSynth.triggerAttackRelease("C3", "1n", time);
+                    }
+                    step++;
+                }, "2n");
+            }
+            Tone.Transport.bpm.value = 68;
+            gamelanLoop.start(0);
+            Tone.Transport.start();
+        }
+
+        function stopSynthGamelan() {
+            if (gamelanLoop) gamelanLoop.stop();
+            if (typeof Tone !== 'undefined' && Tone.Transport.state === 'started') {
+                Tone.Transport.stop();
+            }
+        }
+
+        function startGamelanPlayback() {
+            gamelanPlaying = true;
+            updateGamelanUI(true);
+            const audioEl = document.getElementById('gamelan-audio-el');
+            if (!useSynthFallback && audioEl) {
+                audioEl.play().catch(function() {
+                    switchToSynthGamelan();
+                });
+            } else {
+                startSynthGamelan();
+            }
+        }
+
+        function stopGamelanPlayback() {
+            gamelanPlaying = false;
+            updateGamelanUI(false);
+            const audioEl = document.getElementById('gamelan-audio-el');
+            if (audioEl) audioEl.pause();
+            stopSynthGamelan();
+        }
+
+        window.toggleGamelanMusic = function() {
+            autoStartDone = true;
+            if (gamelanPlaying) {
+                stopGamelanPlayback();
+                showToast("Irama gamelan dihentikan.");
+            } else {
+                startGamelanPlayback();
+                showToast("Memainkan irama gamelan rasmi istiadat.");
+            }
+        };
+
+        function updateGamelanUI(isPlaying) {
+            const eq = document.getElementById('gamelan-eq');
+            const icon = document.getElementById('gamelan-icon');
+            const label = document.getElementById('gamelan-label');
+            if (!eq || !icon || !label) return;
+            if (isPlaying) {
+                eq.classList.add('playing');
+                icon.className = "fa-solid fa-pause text-[11px] text-amberGold-300";
+                label.textContent = "Gamelan Aktif";
+            } else {
+                eq.classList.remove('playing');
+                icon.className = "fa-solid fa-play text-[11px] text-amberGold-300";
+                label.textContent = "Irama Gamelan";
+            }
+        }
+
+        /**
+         * 2. NAVIGASI HALAMAN & LERETAN (SWIPE / DRAG)
+         */
+        window.goToPage = function(pageNumber) {
+            if (pageNumber < 1 || pageNumber > totalPages) return;
+            const goingBack = pageNumber < currentPage;
+
+            document.querySelectorAll('.magazine-page').forEach(function(page) {
+                page.classList.remove('active', 'slide-back');
+            });
+
+            const targetPage = document.getElementById('page-' + pageNumber);
+            if (targetPage) {
+                if (goingBack) targetPage.classList.add('slide-back');
+                void targetPage.offsetWidth;
+                targetPage.classList.remove('slide-back');
+                targetPage.classList.add('active');
+            }
+
+            currentPage = pageNumber;
+            updateNavigationUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.nextPage = function() {
+            if (currentPage < totalPages) window.goToPage(currentPage + 1);
+        };
+
+        window.prevPage = function() {
+            if (currentPage > 1) window.goToPage(currentPage - 1);
+        };
+
+        function updateNavigationUI() {
+            const pageNumEl = document.getElementById('current-page-num');
+            const progressEl = document.getElementById('reading-progress');
+            const prevBtn = document.getElementById('prev-page-btn');
+            const nextBtn = document.getElementById('next-page-btn');
+
+            if (pageNumEl) pageNumEl.textContent = currentPage;
+            if (progressEl) progressEl.style.width = ((currentPage / totalPages) * 100) + '%';
+            if (prevBtn) prevBtn.disabled = (currentPage === 1);
+            if (nextBtn) nextBtn.disabled = (currentPage === totalPages);
+
+            document.querySelectorAll('.nav-tab').forEach(function(btn) {
+                const navPage = parseInt(btn.getAttribute('data-nav'), 10);
+                if (navPage === currentPage) {
+                    btn.classList.add('bg-amberGold-500/20', 'text-amberGold-200', 'border', 'border-amberGold-400/40');
+                    btn.classList.remove('text-slate-300');
+                } else {
+                    btn.classList.remove('bg-amberGold-500/20', 'text-amberGold-200', 'border', 'border-amberGold-400/40');
+                    btn.classList.add('text-slate-300');
+                }
+            });
+
+            document.querySelectorAll('.page-dot').forEach(function(dot, idx) {
+                if (idx + 1 === currentPage) {
+                    dot.classList.remove('bg-slate-600', 'w-2.5');
+                    dot.classList.add('bg-amberGold-400', 'w-6');
+                } else {
+                    dot.classList.remove('bg-amberGold-400', 'w-6');
+                    dot.classList.add('bg-slate-600', 'w-2.5');
+                }
+            });
+        }
+
+        function setupSwipeNavigation() {
+            const area = document.getElementById('magazine-swipe-area');
+            if (!area) return;
+            let startX = 0;
+            let startY = 0;
+
+            area.addEventListener('touchstart', function(e) {
+                startX = e.changedTouches[0].screenX;
+                startY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            area.addEventListener('touchend', function(e) {
+                const diffX = e.changedTouches[0].screenX - startX;
+                const diffY = e.changedTouches[0].screenY - startY;
+                if (Math.abs(diffX) > 65 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
+                    if (diffX < 0) window.nextPage();
+                    else window.prevPage();
+                }
+            }, { passive: true });
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+            if (e.key === 'ArrowRight') window.nextPage();
+            if (e.key === 'ArrowLeft') window.prevPage();
+        });
+
+        window.toggleMobileMenu = function() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        };
+
+        window.toggleFullScreen = function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(function() {});
+            } else if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        };
+
+        window.printMagazine = function() {
+            showToast("Menyediakan susunan cetakan majalah A4...");
+            setTimeout(function() { window.print(); }, 350);
+        };
+
+        /**
+         * 3. SEGERAK DATA PENERIMA & AJK DARI GOOGLE SHEETS (GVIZ JSONP)
+         */
+        function loadGoogleSheetGviz(sheetId, callbackName) {
+            return new Promise(function(resolve, reject) {
+                const script = document.createElement('script');
+                const timeoutId = setTimeout(function() {
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    reject(new Error("Masa tamat sambungan Google Sheets"));
+                }, 8000);
+
+                window[callbackName] = function(response) {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    if (response && response.table) {
+                        resolve(response.table);
+                    } else {
+                        reject(new Error("Format data tidak sah"));
+                    }
+                };
+
+                script.src = "https://docs.google.com/spreadsheets/d/" + sheetId + "/gviz/tq?tqx=out:json;responseHandler:" + callbackName;
+                script.onerror = function() {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    reject(new Error("Gagal memuatkan skrip Google Sheets"));
+                };
+                document.body.appendChild(script);
+            });
+        }
+
+        function escapeHtml(text) {
+            return String(text || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function getInitials(name) {
+            const cleaned = String(name || 'JIM').replace(/^(YBhg\.|Dato'|Datuk|Tuan|Puan|Encik|Cik|Haji|Hajah)\s+/gi, '').trim();
+            const parts = cleaned.split(/\s+/);
+            if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+            return cleaned.slice(0, 2).toUpperCase() || 'JM';
+        }
+
+        window.fetchRecipientsFromGoogleSheets = async function() {
+            const badge = document.getElementById('data-source-badge');
+            try {
+                if (badge) {
+                    badge.innerHTML = '<i class="fa-solid fa-rotate fa-spin"></i> <span>Menyegerak Rekod...</span>';
+                }
+                const table = await loadGoogleSheetGviz(RECIPIENTS_SHEET_ID, 'gvizRecipientsCb_' + Date.now());
+                const cols = (table.cols || []).map(function(c) { return (c.label || '').toLowerCase().trim(); });
+                const rows = table.rows || [];
+
+                const parsed = rows.map(function(row) {
+                    const cells = row.c || [];
+                    const getVal = function(idx) {
+                        if (!cells[idx] || cells[idx].v === null || cells[idx].v === undefined) return '';
+                        return String(cells[idx].f || cells[idx].v).trim();
+                    };
+
+                    // Kesan lajur secara pintar mengikut tajuk atau susunan lajur
+                    let nama = '', jawatan = '', pingat = '', tahun = '', gambar = '';
+                    cols.forEach(function(label, i) {
+                        const val = getVal(i);
+                        if (!val) return;
+                        if (label.includes('nama')) nama = val;
+                        else if (label.includes('jawatan') || label.includes('gred')) jawatan = val;
+                        else if (label.includes('pingat') || label.includes('anugerah')) pingat = val;
+                        else if (label.includes('tahun') || label.includes('khidmat')) tahun = val;
+                        else if (label.includes('gambar') || label.includes('foto') || label.includes('url') || label.includes('image')) gambar = val;
+                    });
+
+                    // Jika baris pertama bertindak sebagai tajuk di dalam data
+                    if (!nama && cells.length >= 2) {
+                        nama = getVal(0);
+                        jawatan = getVal(1);
+                        pingat = getVal(2);
+                        tahun = getVal(3);
+                        gambar = getVal(4);
+                    }
+
+                    // Cari pautan gambar jika diletakkan di mana-mana lajur
+                    if (!gambar) {
+                        for (let k = 0; k < cells.length; k++) {
+                            const v = getVal(k);
+                            if (v.includes('drive.google.com') || v.startsWith('http')) {
+                                gambar = v;
+                                break;
+                            }
+                        }
+                    }
+
+                    return { nama: nama, jawatanGred: jawatan, pingat: pingat, tahunKhidmat: tahun, urlGambar: gambar };
+                }).filter(function(item) {
+                    return item.nama && item.nama.toLowerCase() !== 'nama' && item.nama.toLowerCase() !== 'nama penuh';
+                });
+
+                if (parsed.length > 0) {
+                    recipientsData = parsed;
+                    if (badge) {
+                        badge.className = "px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs flex items-center space-x-1.5";
+                        badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>Rekod Rasmi (' + recipientsData.length + ' Penerima)</span>';
+                    }
+                } else {
+                    throw new Error("Tiada rekod aktif");
+                }
+            } catch (err) {
+                recipientsData = [...FALLBACK_RECIPIENTS];
+                if (badge) {
+                    badge.className = "px-3 py-1 rounded-full bg-amberGold-500/15 border border-amberGold-400/30 text-amberGold-300 text-xs flex items-center space-x-1.5";
+                    badge.innerHTML = '<i class="fa-solid fa-list-check"></i> <span>Senarai Penerima (' + recipientsData.length + ' Rekod)</span>';
+                }
+            }
+            renderRecipients();
+        };
+
+        window.setCategoryFilter = function(cat) {
+            currentCategoryFilter = cat;
+            document.querySelectorAll('.filter-btn').forEach(function(btn) {
+                if (btn.getAttribute('data-filter') === cat) {
+                    btn.className = "filter-btn active px-4 py-2 rounded-xl text-xs font-bold bg-amberGold-400 text-obsidian-950 transition";
+                } else {
+                    btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-obsidian-800 text-slate-200 border border-amberGold-400/25 hover:border-amberGold-400 transition";
+                }
+            });
+            renderRecipients();
+        };
+
+        window.filterRecipients = function() {
+            renderRecipients();
+        };
+
+        function renderRecipients() {
+            const searchEl = document.getElementById('search-recipient');
+            const grid = document.getElementById('recipients-grid');
+            const emptyMsg = document.getElementById('no-recipients-msg');
+            if (!grid) return;
+
+            const query = searchEl ? searchEl.value.toLowerCase().trim() : '';
+
+            const is30Check = function(p) {
+                const txt = (p.pingat + ' ' + p.tahunKhidmat).toLowerCase();
+                return txt.includes('30') || txt.includes('berjasa') || txt.includes('ppb');
+            };
+            const is25Check = function(p) {
+                const txt = (p.pingat + ' ' + p.tahunKhidmat).toLowerCase();
+                return txt.includes('25') || txt.includes('setia') || txt.includes('pps');
+            };
+
+            const countAllEl = document.getElementById('count-all');
+            const count30El = document.getElementById('count-30');
+            const count25El = document.getElementById('count-25');
+            if (countAllEl) countAllEl.textContent = recipientsData.length;
+            if (count30El) count30El.textContent = recipientsData.filter(is30Check).length;
+            if (count25El) count25El.textContent = recipientsData.filter(is25Check).length;
+
+            const filtered = recipientsData.filter(function(item) {
+                const matchCat = currentCategoryFilter === 'ALL' ||
+                    (currentCategoryFilter === '30' && is30Check(item)) ||
+                    (currentCategoryFilter === '25' && is25Check(item));
+
+                const matchQuery = !query ||
+                    item.nama.toLowerCase().includes(query) ||
+                    item.jawatanGred.toLowerCase().includes(query) ||
+                    item.pingat.toLowerCase().includes(query) ||
+                    item.tahunKhidmat.toLowerCase().includes(query);
+
+                return matchCat && matchQuery;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                if (emptyMsg) emptyMsg.classList.remove('hidden');
+                return;
+            }
+
+            if (emptyMsg) emptyMsg.classList.add('hidden');
+            grid.innerHTML = filtered.map(function(person, index) {
+                const is30 = is30Check(person);
+                const badgeClass = is30
+                    ? 'bg-amberGold-500/20 border-amberGold-400/40 text-amberGold-300'
+                    : 'bg-sky-500/20 border-sky-400/40 text-sky-300';
+                const pingatLabel = person.pingat || (is30 ? 'Pingat Perkhidmatan Berjasa (PPB)' : 'Pingat Perkhidmatan Setia (PPS)');
+                const tahunLabel = person.tahunKhidmat || (is30 ? '30 Tahun' : '25 Tahun');
+                const imgSrc = window.resolveDriveImageUrl(person.urlGambar, 0);
+                const initials = getInitials(person.nama);
+
+                const avatarHtml = imgSrc
+                    ? '<img src="' + escapeHtml(imgSrc) + '" data-raw-url="' + escapeHtml(person.urlGambar) + '" data-attempt="0" referrerpolicy="no-referrer" onerror="handleRecipientImgError(this)" alt="' + escapeHtml(person.nama) + '" class="w-full h-full object-cover">' +
+                      '<div style="display:none" class="w-full h-full bg-obsidian-800 items-center justify-center font-cinzel font-bold text-amberGold-300 text-base">' + initials + '</div>'
+                    : '<div class="w-full h-full bg-obsidian-800 flex items-center justify-center font-cinzel font-bold text-amberGold-300 text-base">' + initials + '</div>';
+
+                return '<div class="bg-obsidian-900/90 border border-amberGold-400/25 hover:border-amberGold-400/60 rounded-2xl p-4 sm:p-5 transition shadow-md flex items-center space-x-4">' +
+                    '<div class="w-16 h-20 sm:w-20 sm:h-24 rounded-xl p-0.5 bg-gradient-to-b from-amberGold-300 to-amberGold-600 shrink-0 overflow-hidden shadow">' +
+                        '<div class="w-full h-full rounded-[10px] overflow-hidden bg-obsidian-800">' + avatarHtml + '</div>' +
+                    '</div>' +
+                    '<div class="flex-grow min-w-0">' +
+                        '<div class="flex flex-wrap items-center gap-1.5 mb-1.5">' +
+                            '<span class="px-2.5 py-0.5 rounded-full border text-[10px] font-bold ' + badgeClass + '">' +
+                                '<i class="fa-solid fa-medal mr-1"></i>' + escapeHtml(pingatLabel) +
+                            '</span>' +
+                            '<span class="px-2 py-0.5 rounded bg-obsidian-950 border border-amberGold-400/20 text-amberGold-300 text-[10px] font-semibold">' +
+                                escapeHtml(tahunLabel) +
+                            '</span>' +
+                        '</div>' +
+                        '<h4 class="font-playfair text-base sm:text-lg font-bold text-ivory leading-snug">' + escapeHtml(person.nama) + '</h4>' +
+                        '<p class="text-xs text-slate-300 mt-1">' + escapeHtml(person.jawatanGred || 'Pegawai Jabatan Imigresen Malaysia') + '</p>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        /**
+         * 4. JAWATANKUASA PELAKSANA ISTIADAT (AMBIL TAJUK & NAMA SAHAJA + TUGAS STANDARD)
+         */
+        function getStandardAjkDuty(jkTitle) {
+            const t = String(jkTitle || '').toLowerCase();
+            if (t.includes('protokol') || t.includes('sambutan')) {
+                return "Menyelaras susunan tempat duduk VVIP, penerima pingat, serta protokol ketibaan dan sambutan tetamu kehormat.";
+            }
+            if (t.includes('istiadat') || t.includes('pengurusan penerima') || t.includes('penyampaian')) {
+                return "Menguruskan raptai penuh, susunan giliran penerima pingat, dan tatacara penyampaian anugerah di pentas.";
+            }
+            if (t.includes('kawalan') || t.includes('sword') || t.includes('perbarisan')) {
+                return "Menyelaras kawad kawalan sukuan, barisan sword bearer, dan tatacara perbarisan rasmi istiadat.";
+            }
+            if (t.includes('multimedia') || t.includes('audio') || t.includes('montaj') || t.includes('teknikal') || t.includes('ict')) {
+                return "Menyediakan tayangan montaj istiadat, paparan skrin LED, sistem audio visual, dan majalah digital.";
+            }
+            if (t.includes('juruacara') || t.includes('doa') || t.includes('teks')) {
+                return "Menyediakan teks pengacaraan rasmi istiadat, pengisytiharan nama penerima pingat, dan bacaan doa.";
+            }
+            if (t.includes('dewan') || t.includes('pentas') || t.includes('persiapan') || t.includes('logistik')) {
+                return "Memastikan susun atur dewan, hiasan pentas istiadat, dan kelengkapan logistik berada dalam keadaan sempurna.";
+            }
+            if (t.includes('pendaftaran') || t.includes('cenderamata') || t.includes('jemputan')) {
+                return "Menguruskan kaunter pendaftaran penerima pingat, edaran buku program, dan penyediaan cenderamata kenangan.";
+            }
+            if (t.includes('jamuan') || t.includes('sajian') || t.includes('makanan')) {
+                return "Menyelaras menu dan aturan jamuan rasmi VVIP, tetamu jemputan, penerima pingat, serta petugas majlis.";
+            }
+            if (t.includes('kebudayaan') || t.includes('persembahan') || t.includes('gamelan') || t.includes('muzik')) {
+                return "Menyelaras persembahan iringan muzik gamelan tradisional dan kebudayaan sepanjang berlangsungnya majlis.";
+            }
+            if (t.includes('keselamatan') || t.includes('trafik') || t.includes('parkir')) {
+                return "Mengawal selia keselamatan kawasan dewan, kelancaran aliran trafik, dan petak parkir tetamu kehormat.";
+            }
+            if (t.includes('fotografi') || t.includes('publisiti') || t.includes('dokumentasi') || t.includes('media')) {
+                return "Merakam gambar dan video rasmi istiadat serta menyelaras liputan publisiti dan dokumentasi jabatan.";
+            }
+            return "Menyelaras dan melaksanakan tugasan jawatankuasa mengikut ketetapan protokol rasmi Istiadat Penganugerahan Pingat.";
+        }
+
+        async function fetchAjkFromGoogleSheets() {
+            renderAjkCards(FALLBACK_AJK_LIST);
+            try {
+                const table = await loadGoogleSheetGviz(AJK_SHEET_ID, 'gvizAjkCb_' + Date.now());
+                const rows = table.rows || [];
+                const parsed = rows.map(function(row) {
+                    const cells = row.c || [];
+                    const getVal = function(idx) {
+                        if (!cells[idx] || cells[idx].v === null || cells[idx].v === undefined) return '';
+                        return String(cells[idx].f || cells[idx].v).trim();
+                    };
+                    // Ambil Tajuk Jawatankuasa (Jalur A) sahaja tanpa senarai nama (Jalur D)
+                    const tajukJk = getVal(0);
+                    return {
+                        jawatankuasa: tajukJk,
+                        tugas: getStandardAjkDuty(tajukJk)
+                    };
+                }).filter(function(item) {
+                    const jkLower = item.jawatankuasa.toLowerCase();
+                    return item.jawatankuasa &&
+                        !jkLower.includes('bil') &&
+                        jkLower !== 'ajk' &&
+                        !jkLower.includes('jawatankuasa');
+                });
+
+                if (parsed.length > 0) {
+                    renderAjkCards(parsed);
+                }
+            } catch (err) {
+                // Kekalkan senarai standard rasmi jika akses fail gerak kerja terhad
+            }
+        }
+
+        function renderAjkCards(list) {
+            const grid = document.getElementById('ajk-grid');
+            if (!grid) return;
+            grid.innerHTML = list.map(function(item, idx) {
+                return '<div class="bg-obsidian-900/90 border border-amberGold-400/25 hover:border-amberGold-400/50 rounded-2xl p-5 flex flex-col justify-between transition">' +
+                    '<div>' +
+                        '<div class="flex items-center justify-between mb-2">' +
+                            '<span class="text-[10px] font-bold uppercase tracking-widest text-amberGold-400">JK #' + String(idx + 1).padStart(2, '0') + '</span>' +
+                            '<i class="fa-solid fa-users-gear text-amberGold-400/60 text-xs"></i>' +
+                        '</div>' +
+                        '<h4 class="font-cinzel text-sm sm:text-base font-bold text-amberGold-200 leading-snug">' + escapeHtml(item.jawatankuasa) + '</h4>' +
+                    '</div>' +
+                    '<p class="text-xs text-slate-300 mt-3 pt-2.5 border-t border-slate-800 leading-relaxed">' + escapeHtml(item.tugas) + '</p>' +
+                '</div>';
+            }).join('');
+        }
+
+        /**
+         * 5. TOAST NOTIFICATION & ANIMASI PARTIKEL EMAS TERAPUNG
+         */
+        function showToast(msg) {
+            const toast = document.getElementById('toast-box');
+            const msgEl = document.getElementById('toast-message');
+            if (!toast || !msgEl) return;
+            msgEl.textContent = msg;
+            toast.classList.remove('translate-x-[150%]');
+            setTimeout(function() {
+                toast.classList.add('translate-x-[150%]');
+            }, 3200);
+        }
+
+        function initGoldParticles() {
+            const canvas = document.getElementById('gold-particles');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width = 0, height = 0;
+            const particles = [];
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            const count = Math.min(70, Math.floor(width / 18));
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 2.4 + 0.6,
+                    vx: (Math.random() - 0.5) * 0.35,
+                    vy: -Math.random() * 0.45 - 0.15,
+                    alpha: Math.random() * 0.7 + 0.2,
+                    pulse: Math.random() * Math.PI * 2,
+                    isBokeh: Math.random() > 0.85
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.pulse += 0.025;
+
+                    if (p.y < -15) { p.y = height + 15; p.x = Math.random() * width; }
+                    if (p.x < -15) p.x = width + 15;
+                    if (p.x > width + 15) p.x = -15;
+
+                    const alpha = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
+                    ctx.beginPath();
+                    if (p.isBokeh) {
+                        ctx.arc(p.x, p.y, p.radius * 3.2, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(245, 158, 11, ' + (alpha * 0.16) + ')';
+                    } else {
+                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(253, 224, 71, ' + alpha + ')';
+                        ctx.shadowBlur = 10;
+                        ctx.shadowColor = 'rgba(245, 158, 11, 0.75)';
+                    }
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        window.onload = function() {
+            initGoldParticles();
+            updateNavigationUI();
+            setupSwipeNavigation();
+            fetchRecipientsFromGoogleSheets();
+            fetchAjkFromGoogleSheets();
+            initGamelanAudio();
+        };
+    </script>
+</body>
+</html>
