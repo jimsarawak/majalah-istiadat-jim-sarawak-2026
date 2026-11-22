@@ -959,66 +959,158 @@
     </div>
 
     <!-- Elemen Audio Rasmi Gamelan (Google Drive Link Terkini) -->
-    <audio id="gamelan-audio-el" preload="auto" loop></audio>
+    <audio id="gamelan-audio-el" preload="auto" playsinline loop></audio>
 
     <!-- ===================================================================== -->
     <!-- SKRIP LENGKAP: GAMELAN, GOOGLE SHEETS LIVE, SWIPE & PARTIKEL EMAS     -->
     <!-- ===================================================================== -->
     <script>
-        // ID Rasmi Google Sheets & Audio Gamelan Tuan
-        const RECIPIENTS_SHEET_ID = "1mgJjSLj-zQttXgOftH7u-ZMNa8RtsJi1JcglnZ124is";
-        const AJK_SHEET_ID = "1b4f903JREu4K0PhwbAj0kLezZgBbybkK";
-        const GAMELAN_DRIVE_ID = "1zhOBk3VOJPo9xml9nb7Dz0Rte9HHymuq";
-
+        const SHEET_ID_PENERIMA = '1mgJjSLj-zQttXgOftH7u-ZMNa8RtsJi1JcglnZ124is';
+        const SHEET_ID_AJK = '1b4f903JREu4K0PhwbAj0kLezZgBbybkK';
+        const GAMELAN_FILE_ID = '1zhOBk3VOJPo9xml9nb7Dz0Rte9HHymuq';
         const GAMELAN_AUDIO_SOURCES = [
-            "./gamelan.mp3",
-            "https://drive.usercontent.google.com/download?id=" + GAMELAN_DRIVE_ID + "&export=download&confirm=t",
-            "https://docs.google.com/uc?export=download&confirm=t&id=" + GAMELAN_DRIVE_ID
+            './gamelan.mp3',
+            'https://drive.usercontent.google.com/download?id=' + GAMELAN_FILE_ID + '&export=download&confirm=t',
+            'https://docs.google.com/uc?export=download&id=' + GAMELAN_FILE_ID
         ];
 
-        // Data Sandaran Penerima (Jika Google Sheets sedang memuatkan data)
-        const FALLBACK_RECIPIENTS = [
-            { nama: "Tuan Haji Mohamad bin Abdullah", jawatanGred: "Timbalan Penolong Pengarah Imigresen Kanan (KP38)", pingat: "Pingat Perkhidmatan Berjasa (PPB)", tahunKhidmat: "30 Tahun", urlGambar: "" },
-            { nama: "Puan Dayang Rosnah binti Awangku Omar", jawatanGred: "Timbalan Penolong Pengarah Imigresen Tinggi (KP32)", pingat: "Pingat Perkhidmatan Berjasa (PPB)", tahunKhidmat: "30 Tahun", urlGambar: "" },
-            { nama: "Encik Augustine Anak Nyambong", jawatanGred: "Pegawai Imigresen Tinggi (KP28)", pingat: "Pingat Perkhidmatan Setia (PPS)", tahunKhidmat: "25 Tahun", urlGambar: "" },
-            { nama: "Puan Siti Norhayati binti Bujang", jawatanGred: "Pegawai Imigresen Kanan (KP22)", pingat: "Pingat Perkhidmatan Setia (PPS)", tahunKhidmat: "25 Tahun", urlGambar: "" }
-        ];
+        let gamelanSrcIndex = 0;
+        let gamelanPlaying = false;
+        let useSynthFallback = false;
+        let autoStartDone = false;
+        let synthLoop = null;
+        let gamelanSynth = null;
 
-        // Data Sandaran Rasmi Jawatankuasa Pelaksana Istiadat (Tanpa Senarai Nama)
-        const FALLBACK_AJK_LIST = [
-            { jawatankuasa: "Jawatankuasa Protokol & Sambutan", tugas: "Menyelaras susunan tempat duduk VVIP, penerima pingat, serta protokol ketibaan dan sambutan tetamu kehormat." },
-            { jawatankuasa: "Jawatankuasa Istiadat & Pengurusan Penerima", tugas: "Menguruskan raptai penuh, susunan penerima pingat, dan tatacara penyampaian anugerah di pentas." },
-            { jawatankuasa: "Jawatankuasa Kawalan Kehormatan & Sword Bearer", tugas: "Menyelaras kawad kawalan sukuan, barisan sword bearer, dan tatacara perbarisan rasmi istiadat." },
-            { jawatankuasa: "Jawatankuasa Multimedia, Audio Visual & Montaj", tugas: "Menyediakan tayangan montaj istiadat, paparan skrin LED, sistem audio visual, dan majalah digital." },
-            { jawatankuasa: "Jawatankuasa Juruacara & Pembaca Doa", tugas: "Menyediakan teks pengacaraan rasmi istiadat, pengisytiharan nama penerima pingat, dan bacaan doa." },
-            { jawatankuasa: "Jawatankuasa Persiapan Dewan & Hiasan Pentas", tugas: "Memastikan susun atur dewan, hiasan pentas istiadat, dan kelengkapan logistik berada dalam keadaan sempurna." },
-            { jawatankuasa: "Jawatankuasa Pendaftaran & Cenderamata", tugas: "Menguruskan kaunter pendaftaran penerima pingat, edaran buku program, dan penyediaan cenderamata kenangan." },
-            { jawatankuasa: "Jawatankuasa Jamuan & Sajian", tugas: "Menyelaras menu dan aturan jamuan rasmi VVIP, tetamu jemputan, penerima pingat, serta petugas majlis." },
-            { jawatankuasa: "Jawatankuasa Persembahan Kebudayaan", tugas: "Menyelaras persembahan iringan muzik gamelan tradisional dan kebudayaan sepanjang berlangsungnya majlis." }
-        ];
-
-        let recipientsData = [];
-        let currentCategoryFilter = 'ALL';
         let currentPage = 1;
         const totalPages = 6;
+        let recipientsData = [];
+        let currentCategoryFilter = 'ALL';
 
-        // Status Muzik Gamelan
-        let gamelanPlaying = false;
-        let gamelanSrcIndex = 0;
-        let useSynthFallback = false;
-        let gamelanLoop = null;
-        let gamelanSynth = null;
-        let autoStartDone = false;
+        const DEFAULT_AJK_LIST = [
+            { title: 'Jawatankuasa Protokol & Sambutan', duty: 'Menguruskan susunan tempat duduk tetamu kehormat (VVIP), penyambut tetamu, dan tatacara protokol istiadat.' },
+            { title: 'Jawatankuasa Kawad & Perbarisan', duty: 'Menyelaras Kawad Kawalan Sukuan, Sword Bearer, serta pergerakan masuk dan keluar perbarisan istiadat.' },
+            { title: 'Jawatankuasa Pendaftaran & Penerima', duty: 'Menguruskan kaunter pendaftaran penerima pingat, penyemakan kehadiran, serta susunan giliran naik ke pentas.' },
+            { title: 'Jawatankuasa Pingat & Cenderamata', duty: 'Menyediakan dulang istiadat, penyusunan pingat PPB/PPS mengikut kekananan, sijil, dan cenderamata VVIP.' },
+            { title: 'Jawatankuasa Teknikal, Audio & Multimedia', duty: 'Mengendalikan sistem siar raya, paparan skrin LED, montaj istiadat, dan iringan muzik gamelan.' },
+            { title: 'Jawatankuasa Persiapan Dewan & Pentas', duty: 'Menyelia hiasan pentas utama, susun atur kerusi dewan, backdrop rasmi, dan kebersihan lokasi majlis.' },
+            { title: 'Jawatankuasa Jamuan & Sajian', duty: 'Menguruskan hidangan jamuan VVIP, tetamu jemputan, para penerima pingat, serta petugas majlis.' },
+            { title: 'Jawatankuasa Keselamatan & Lalu Lintas', duty: 'Memastikan kawalan keselamatan kawasan dewan, kelancaran aliran trafik, dan petak parkir tetamu.' },
+            { title: 'Jawatankuasa Publisiti, Fotografi & Dokumentasi', duty: 'Merakam gambar rasmi istiadat, sesi bergambar berkumpulan, dan laporan dokumentasi majlis.' }
+        ];
+
+        function resolveCommitteeDuty(title) {
+            const t = String(title || '').toLowerCase();
+            if (t.includes('protokol') || t.includes('sambutan')) return 'Menguruskan susunan tempat duduk tetamu kehormat (VVIP), penyambut tetamu, dan tatacara protokol istiadat.';
+            if (t.includes('kawad') || t.includes('perbarisan')) return 'Menyelaras Kawad Kawalan Sukuan, Sword Bearer, serta pergerakan masuk dan keluar perbarisan istiadat.';
+            if (t.includes('daftar') || t.includes('penerima')) return 'Menguruskan kaunter pendaftaran penerima pingat, penyemakan kehadiran, serta susunan giliran naik ke pentas.';
+            if (t.includes('pingat') || t.includes('sijil') || t.includes('cenderamata') || t.includes('hadiah')) return 'Menyediakan dulang istiadat, penyusunan pingat PPB/PPS mengikut kekananan, sijil, dan cenderamata VVIP.';
+            if (t.includes('teknikal') || t.includes('siar raya') || t.includes('multimedia') || t.includes('ict') || t.includes('montaj')) return 'Mengendalikan sistem siar raya, paparan skrin LED, montaj istiadat, dan iringan muzik gamelan.';
+            if (t.includes('dewan') || t.includes('pentas') || t.includes('logistik') || t.includes('persiapan')) return 'Menyelia hiasan pentas utama, susun atur kerusi dewan, backdrop rasmi, dan kelancaran logistik majlis.';
+            if (t.includes('jamuan') || t.includes('makan') || t.includes('sajian')) return 'Menguruskan hidangan jamuan VVIP, tetamu jemputan, para penerima pingat, serta petugas majlis.';
+            if (t.includes('keselamatan') || t.includes('trafik') || t.includes('parkir')) return 'Memastikan kawalan keselamatan kawasan dewan, kelancaran aliran trafik, dan petak parkir tetamu.';
+            if (t.includes('foto') || t.includes('gambar') || t.includes('dokumentasi') || t.includes('publisiti') || t.includes('media')) return 'Merakam gambar rasmi istiadat, sesi bergambar berkumpulan, dan laporan dokumentasi majlis.';
+            if (t.includes('doa') || t.includes('kerohanian')) return 'Memimpin bacaan doa memohon keberkatan dan kelancaran perjalanan majlis istiadat.';
+            if (t.includes('pengacara') || t.includes('juruacara') || t.includes('teks')) return 'Mengendalikan pengacaraan majlis mengikut skrip protokol istiadat rasmi jabatan.';
+            return 'Menyelaras pelaksanaan tugasan jawatankuasa mengikut garis panduan dan protokol istiadat jabatan.';
+        }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-box');
+            const toastMsg = document.getElementById('toast-message');
+            if (!toast || !toastMsg) return;
+            toastMsg.textContent = msg;
+            toast.classList.remove('translate-x-[150%]');
+            setTimeout(() => {
+                toast.classList.add('translate-x-[150%]');
+            }, 3200);
+        }
 
         /**
-         * 1. PEMAIN AUDIO GAMELAN (LINK GOOGLE DRIVE + SANDARAN SINTESIS)
+         * 1. PEMAIN AUDIO GAMELAN (LINK MP3 GITHUB / GOOGLE DRIVE + SANDARAN SINTESIS)
          */
+        function updateGamelanUI(isPlaying) {
+            const eq = document.getElementById('gamelan-eq');
+            const icon = document.getElementById('gamelan-icon');
+            const label = document.getElementById('gamelan-label');
+            if (!eq || !icon) return;
+            if (isPlaying) {
+                eq.classList.add('playing');
+                icon.className = 'fa-solid fa-pause text-[11px] text-amberGold-300';
+                if (label) label.textContent = 'Gamelan Aktif';
+            } else {
+                eq.classList.remove('playing');
+                icon.className = 'fa-solid fa-play text-[11px] text-amberGold-300';
+                if (label) label.textContent = 'Irama Gamelan';
+            }
+        }
+
+        function startSynthGamelan() {
+            if (typeof Tone === 'undefined') return;
+            try {
+                if (Tone.context.state !== 'running') Tone.start();
+                if (!gamelanSynth) {
+                    gamelanSynth = new Tone.PolySynth(Tone.Synth, {
+                        oscillator: { type: 'sine' },
+                        envelope: { attack: 0.03, decay: 1.4, sustain: 0.1, release: 1.8 }
+                    }).toDestination();
+                    gamelanSynth.volume.value = -12;
+                }
+                const notes = ['C4', 'D4', 'E4', 'G4', 'A4', 'C5', 'A4', 'G4', 'E4', 'D4'];
+                let idx = 0;
+                if (synthLoop) clearInterval(synthLoop);
+                synthLoop = setInterval(() => {
+                    if (!gamelanPlaying) return;
+                    gamelanSynth.triggerAttackRelease(notes[idx % notes.length], '2n');
+                    idx++;
+                }, 750);
+            } catch (e) {}
+        }
+
+        function stopSynthGamelan() {
+            if (synthLoop) {
+                clearInterval(synthLoop);
+                synthLoop = null;
+            }
+        }
+
+        function switchToSynthGamelan() {
+            useSynthFallback = true;
+            if (gamelanPlaying) {
+                updateGamelanUI(true);
+                startSynthGamelan();
+            } else {
+                updateGamelanUI(false);
+            }
+        }
+
         function initGamelanAudio() {
             const audioEl = document.getElementById('gamelan-audio-el');
             if (!audioEl) return;
 
-            audioEl.volume = 0.65;
+            audioEl.volume = 0.7;
+            audioEl.setAttribute('playsinline', '');
             audioEl.src = GAMELAN_AUDIO_SOURCES[0];
+
+            audioEl.addEventListener('playing', function() {
+                gamelanPlaying = true;
+                updateGamelanUI(true);
+            });
+
+            audioEl.addEventListener('pause', function() {
+                if (!useSynthFallback) {
+                    gamelanPlaying = false;
+                    updateGamelanUI(false);
+                }
+            });
 
             audioEl.addEventListener('error', function() {
                 gamelanSrcIndex++;
@@ -1032,79 +1124,39 @@
                 }
             });
 
-            // Cuba auto-play terus; jika pelayar menyekat tanpa klik, mainkan pada sentuhan pertama
-            audioEl.play().then(function() {
-                gamelanPlaying = true;
+            const unlockMobileAudio = function() {
+                if (autoStartDone) return;
                 autoStartDone = true;
+                document.removeEventListener('click', unlockMobileAudio);
+                document.removeEventListener('touchend', unlockMobileAudio);
+                startGamelanPlayback();
+            };
+
+            audioEl.play().then(function() {
+                autoStartDone = true;
+                gamelanPlaying = true;
                 updateGamelanUI(true);
             }).catch(function() {
-                const unlockAudio = function() {
-                    if (autoStartDone) return;
-                    autoStartDone = true;
-                    document.removeEventListener('click', unlockAudio);
-                    document.removeEventListener('touchstart', unlockAudio);
-                    startGamelanPlayback();
-                };
-                document.addEventListener('click', unlockAudio, { once: true });
-                document.addEventListener('touchstart', unlockAudio, { once: true });
+                updateGamelanUI(false);
+                document.addEventListener('click', unlockMobileAudio, { once: true });
+                document.addEventListener('touchend', unlockMobileAudio, { once: true });
             });
-        }
-
-        function switchToSynthGamelan() {
-            useSynthFallback = true;
-            if (gamelanPlaying) {
-                startSynthGamelan();
-            }
-        }
-
-        function startSynthGamelan() {
-            if (typeof Tone === 'undefined') return;
-            if (!gamelanSynth) {
-                const reverb = new Tone.Reverb({ decay: 3.5, wet: 0.45 }).toDestination();
-                gamelanSynth = new Tone.PolySynth(Tone.FMSynth, {
-                    harmonicity: 3.01,
-                    modulationIndex: 4,
-                    oscillator: { type: "sine" },
-                    envelope: { attack: 0.01, decay: 1.6, sustain: 0.05, release: 1.8 }
-                }).connect(reverb);
-                gamelanSynth.volume.value = -14;
-            }
-            if (Tone.context.state !== 'running') {
-                Tone.start();
-            }
-            const pelogNotes = ["C4", "D4", "Eb4", "G4", "Ab4", "C5", "D5", "G4", "Eb4", "D4"];
-            let step = 0;
-            if (!gamelanLoop) {
-                gamelanLoop = new Tone.Loop(function(time) {
-                    const note = pelogNotes[step % pelogNotes.length];
-                    gamelanSynth.triggerAttackRelease(note, "2n", time);
-                    if (step % 4 === 0) {
-                        gamelanSynth.triggerAttackRelease("C3", "1n", time);
-                    }
-                    step++;
-                }, "2n");
-            }
-            Tone.Transport.bpm.value = 68;
-            gamelanLoop.start(0);
-            Tone.Transport.start();
-        }
-
-        function stopSynthGamelan() {
-            if (gamelanLoop) gamelanLoop.stop();
-            if (typeof Tone !== 'undefined' && Tone.Transport.state === 'started') {
-                Tone.Transport.stop();
-            }
         }
 
         function startGamelanPlayback() {
             gamelanPlaying = true;
-            updateGamelanUI(true);
             const audioEl = document.getElementById('gamelan-audio-el');
             if (!useSynthFallback && audioEl) {
-                audioEl.play().catch(function() {
-                    switchToSynthGamelan();
-                });
+                const playPromise = audioEl.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(function() {
+                        updateGamelanUI(true);
+                    }).catch(function() {
+                        switchToSynthGamelan();
+                    });
+                }
             } else {
+                updateGamelanUI(true);
                 startSynthGamelan();
             }
         }
@@ -1121,45 +1173,28 @@
             autoStartDone = true;
             if (gamelanPlaying) {
                 stopGamelanPlayback();
-                showToast("Irama gamelan dihentikan.");
+                showToast('Irama gamelan dihentikan.');
             } else {
                 startGamelanPlayback();
-                showToast("Memainkan irama gamelan rasmi istiadat.");
+                showToast('Memainkan irama gamelan istiadat.');
             }
         };
 
-        function updateGamelanUI(isPlaying) {
-            const eq = document.getElementById('gamelan-eq');
-            const icon = document.getElementById('gamelan-icon');
-            const label = document.getElementById('gamelan-label');
-            if (!eq || !icon || !label) return;
-            if (isPlaying) {
-                eq.classList.add('playing');
-                icon.className = "fa-solid fa-pause text-[11px] text-amberGold-300";
-                label.textContent = "Gamelan Aktif";
-            } else {
-                eq.classList.remove('playing');
-                icon.className = "fa-solid fa-play text-[11px] text-amberGold-300";
-                label.textContent = "Irama Gamelan";
-            }
-        }
-
         /**
-         * 2. NAVIGASI HALAMAN & LERETAN (SWIPE / DRAG)
+         * 2. NAVIGASI HALAMAN MAJALAH, LERET (SWIPE) & CETAK
          */
         window.goToPage = function(pageNumber) {
             if (pageNumber < 1 || pageNumber > totalPages) return;
-            const goingBack = pageNumber < currentPage;
+            const isGoingBack = pageNumber < currentPage;
 
-            document.querySelectorAll('.magazine-page').forEach(function(page) {
+            document.querySelectorAll('.magazine-page').forEach(page => {
                 page.classList.remove('active', 'slide-back');
             });
 
             const targetPage = document.getElementById('page-' + pageNumber);
             if (targetPage) {
-                if (goingBack) targetPage.classList.add('slide-back');
+                if (isGoingBack) targetPage.classList.add('slide-back');
                 void targetPage.offsetWidth;
-                targetPage.classList.remove('slide-back');
                 targetPage.classList.add('active');
             }
 
@@ -1178,27 +1213,28 @@
 
         function updateNavigationUI() {
             const pageNumEl = document.getElementById('current-page-num');
+            if (pageNumEl) pageNumEl.textContent = currentPage;
+
             const progressEl = document.getElementById('reading-progress');
+            if (progressEl) progressEl.style.width = ((currentPage / totalPages) * 100) + '%';
+
             const prevBtn = document.getElementById('prev-page-btn');
             const nextBtn = document.getElementById('next-page-btn');
-
-            if (pageNumEl) pageNumEl.textContent = currentPage;
-            if (progressEl) progressEl.style.width = ((currentPage / totalPages) * 100) + '%';
             if (prevBtn) prevBtn.disabled = (currentPage === 1);
             if (nextBtn) nextBtn.disabled = (currentPage === totalPages);
 
-            document.querySelectorAll('.nav-tab').forEach(function(btn) {
+            document.querySelectorAll('.nav-tab').forEach(btn => {
                 const navPage = parseInt(btn.getAttribute('data-nav'), 10);
                 if (navPage === currentPage) {
-                    btn.classList.add('bg-amberGold-500/20', 'text-amberGold-200', 'border', 'border-amberGold-400/40');
-                    btn.classList.remove('text-slate-300');
+                    btn.classList.add('bg-amberGold-400/20', 'text-amberGold-200', 'border', 'border-amberGold-400/40');
+                    btn.classList.remove('text-slate-300', 'hover:text-amberGold-200');
                 } else {
-                    btn.classList.remove('bg-amberGold-500/20', 'text-amberGold-200', 'border', 'border-amberGold-400/40');
-                    btn.classList.add('text-slate-300');
+                    btn.classList.remove('bg-amberGold-400/20', 'text-amberGold-200', 'border', 'border-amberGold-400/40');
+                    btn.classList.add('text-slate-300', 'hover:text-amberGold-200');
                 }
             });
 
-            document.querySelectorAll('.page-dot').forEach(function(dot, idx) {
+            document.querySelectorAll('.page-dot').forEach((dot, idx) => {
                 if (idx + 1 === currentPage) {
                     dot.classList.remove('bg-slate-600', 'w-2.5');
                     dot.classList.add('bg-amberGold-400', 'w-6');
@@ -1209,33 +1245,6 @@
             });
         }
 
-        function setupSwipeNavigation() {
-            const area = document.getElementById('magazine-swipe-area');
-            if (!area) return;
-            let startX = 0;
-            let startY = 0;
-
-            area.addEventListener('touchstart', function(e) {
-                startX = e.changedTouches[0].screenX;
-                startY = e.changedTouches[0].screenY;
-            }, { passive: true });
-
-            area.addEventListener('touchend', function(e) {
-                const diffX = e.changedTouches[0].screenX - startX;
-                const diffY = e.changedTouches[0].screenY - startY;
-                if (Math.abs(diffX) > 65 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
-                    if (diffX < 0) window.nextPage();
-                    else window.prevPage();
-                }
-            }, { passive: true });
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
-            if (e.key === 'ArrowRight') window.nextPage();
-            if (e.key === 'ArrowLeft') window.prevPage();
-        });
-
         window.toggleMobileMenu = function() {
             const menu = document.getElementById('mobile-menu');
             if (menu) menu.classList.toggle('hidden');
@@ -1243,147 +1252,111 @@
 
         window.toggleFullScreen = function() {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(function() {});
+                document.documentElement.requestFullscreen().catch(() => {});
             } else if (document.exitFullscreen) {
                 document.exitFullscreen();
             }
         };
 
         window.printMagazine = function() {
-            showToast("Menyediakan susunan cetakan majalah A4...");
-            setTimeout(function() { window.print(); }, 350);
+            window.print();
         };
 
-        /**
-         * 3. SEGERAK DATA PENERIMA & AJK DARI GOOGLE SHEETS (GVIZ JSONP)
-         */
-        function loadGoogleSheetGviz(sheetId, callbackName) {
-            return new Promise(function(resolve, reject) {
-                const script = document.createElement('script');
-                const timeoutId = setTimeout(function() {
-                    delete window[callbackName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    reject(new Error("Masa tamat sambungan Google Sheets"));
-                }, 8000);
-
-                window[callbackName] = function(response) {
-                    clearTimeout(timeoutId);
-                    delete window[callbackName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    if (response && response.table) {
-                        resolve(response.table);
-                    } else {
-                        reject(new Error("Format data tidak sah"));
-                    }
-                };
-
-                script.src = "https://docs.google.com/spreadsheets/d/" + sheetId + "/gviz/tq?tqx=out:json;responseHandler:" + callbackName;
-                script.onerror = function() {
-                    clearTimeout(timeoutId);
-                    delete window[callbackName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    reject(new Error("Gagal memuatkan skrip Google Sheets"));
-                };
-                document.body.appendChild(script);
+        function initSwipeAndKeyboard() {
+            document.addEventListener('keydown', (e) => {
+                if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+                if (e.key === 'ArrowRight') window.nextPage();
+                if (e.key === 'ArrowLeft') window.prevPage();
             });
+
+            const swipeArea = document.getElementById('magazine-swipe-area');
+            if (!swipeArea) return;
+            let startX = 0;
+            let startY = 0;
+
+            swipeArea.addEventListener('touchstart', (e) => {
+                startX = e.changedTouches[0].screenX;
+                startY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            swipeArea.addEventListener('touchend', (e) => {
+                const diffX = e.changedTouches[0].screenX - startX;
+                const diffY = e.changedTouches[0].screenY - startY;
+                if (Math.abs(diffX) > 60 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
+                    if (diffX < 0) window.nextPage();
+                    else window.prevPage();
+                }
+            }, { passive: true });
         }
 
-        function escapeHtml(text) {
-            return String(text || '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
-
-        function getInitials(name) {
-            const cleaned = String(name || 'JIM').replace(/^(YBhg\.|Dato'|Datuk|Tuan|Puan|Encik|Cik|Haji|Hajah)\s+/gi, '').trim();
-            const parts = cleaned.split(/\s+/);
-            if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-            return cleaned.slice(0, 2).toUpperCase() || 'JM';
+        /**
+         * 3. GOOGLE SHEETS LIVE PARSER (PENERIMA & JAWATANKUASA)
+         */
+        function parseGvizJson(rawText) {
+            const start = rawText.indexOf('{');
+            const end = rawText.lastIndexOf('}');
+            if (start === -1 || end === -1) return null;
+            return JSON.parse(rawText.substring(start, end + 1));
         }
 
         window.fetchRecipientsFromGoogleSheets = async function() {
             const badge = document.getElementById('data-source-badge');
+            const url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID_PENERIMA + '/gviz/tq?tqx=out:json';
             try {
-                if (badge) {
-                    badge.innerHTML = '<i class="fa-solid fa-rotate fa-spin"></i> <span>Menyegerak Rekod...</span>';
-                }
-                const table = await loadGoogleSheetGviz(RECIPIENTS_SHEET_ID, 'gvizRecipientsCb_' + Date.now());
-                const cols = (table.cols || []).map(function(c) { return (c.label || '').toLowerCase().trim(); });
-                const rows = table.rows || [];
+                if (badge) badge.innerHTML = '<i class="fa-solid fa-rotate fa-spin"></i> <span>Menyegerak Senarai Penerima...</span>';
+                const res = await fetch(url);
+                const text = await res.text();
+                const json = parseGvizJson(text);
+                if (json && json.table && Array.isArray(json.table.rows)) {
+                    const parsed = [];
+                    json.table.rows.forEach((row) => {
+                        const c = row.c || [];
+                        const val = (idx) => (c[idx] && c[idx].v !== null && c[idx].v !== undefined) ? String(c[idx].v).trim() : '';
+                        const nama = val(0) || val(1);
+                        if (!nama || nama.toLowerCase() === 'nama' || nama.toLowerCase() === 'bil') return;
 
-                const parsed = rows.map(function(row) {
-                    const cells = row.c || [];
-                    const getVal = function(idx) {
-                        if (!cells[idx] || cells[idx].v === null || cells[idx].v === undefined) return '';
-                        return String(cells[idx].f || cells[idx].v).trim();
-                    };
+                        // Sokong format lajur sama ada bermula dari Nama atau Bil
+                        const hasBil = /^\d+$/.test(val(0)) && val(1);
+                        const offset = hasBil ? 1 : 0;
+                        const pNama = val(offset);
+                        const pJawatan = val(offset + 1);
+                        const pPingat = val(offset + 2);
+                        const pTahun = val(offset + 3);
+                        const pGambar = val(offset + 4);
 
-                    // Kesan lajur secara pintar mengikut tajuk atau susunan lajur
-                    let nama = '', jawatan = '', pingat = '', tahun = '', gambar = '';
-                    cols.forEach(function(label, i) {
-                        const val = getVal(i);
-                        if (!val) return;
-                        if (label.includes('nama')) nama = val;
-                        else if (label.includes('jawatan') || label.includes('gred')) jawatan = val;
-                        else if (label.includes('pingat') || label.includes('anugerah')) pingat = val;
-                        else if (label.includes('tahun') || label.includes('khidmat')) tahun = val;
-                        else if (label.includes('gambar') || label.includes('foto') || label.includes('url') || label.includes('image')) gambar = val;
+                        if (pNama && pNama.toLowerCase() !== 'nama') {
+                            parsed.push({
+                                nama: pNama,
+                                jawatan: pJawatan || 'Pegawai Imigresen',
+                                pingat: pPingat || 'Pingat Perkhidmatan',
+                                tahun: pTahun || '',
+                                gambar: pGambar
+                            });
+                        }
                     });
 
-                    // Jika baris pertama bertindak sebagai tajuk di dalam data
-                    if (!nama && cells.length >= 2) {
-                        nama = getVal(0);
-                        jawatan = getVal(1);
-                        pingat = getVal(2);
-                        tahun = getVal(3);
-                        gambar = getVal(4);
-                    }
-
-                    // Cari pautan gambar jika diletakkan di mana-mana lajur
-                    if (!gambar) {
-                        for (let k = 0; k < cells.length; k++) {
-                            const v = getVal(k);
-                            if (v.includes('drive.google.com') || v.startsWith('http')) {
-                                gambar = v;
-                                break;
-                            }
+                    if (parsed.length > 0) {
+                        recipientsData = parsed;
+                        if (badge) {
+                            badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>Live Google Sheets (' + recipientsData.length + ' Penerima)</span>';
                         }
                     }
-
-                    return { nama: nama, jawatanGred: jawatan, pingat: pingat, tahunKhidmat: tahun, urlGambar: gambar };
-                }).filter(function(item) {
-                    return item.nama && item.nama.toLowerCase() !== 'nama' && item.nama.toLowerCase() !== 'nama penuh';
-                });
-
-                if (parsed.length > 0) {
-                    recipientsData = parsed;
-                    if (badge) {
-                        badge.className = "px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs flex items-center space-x-1.5";
-                        badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>Rekod Rasmi (' + recipientsData.length + ' Penerima)</span>';
-                    }
-                } else {
-                    throw new Error("Tiada rekod aktif");
                 }
             } catch (err) {
-                recipientsData = [...FALLBACK_RECIPIENTS];
                 if (badge) {
-                    badge.className = "px-3 py-1 rounded-full bg-amberGold-500/15 border border-amberGold-400/30 text-amberGold-300 text-xs flex items-center space-x-1.5";
-                    badge.innerHTML = '<i class="fa-solid fa-list-check"></i> <span>Senarai Penerima (' + recipientsData.length + ' Rekod)</span>';
+                    badge.innerHTML = '<i class="fa-solid fa-circle-info"></i> <span>Senarai Rasmi (' + recipientsData.length + ' Rekod)</span>';
                 }
             }
             renderRecipients();
         };
 
-        window.setCategoryFilter = function(cat) {
-            currentCategoryFilter = cat;
-            document.querySelectorAll('.filter-btn').forEach(function(btn) {
-                if (btn.getAttribute('data-filter') === cat) {
-                    btn.className = "filter-btn active px-4 py-2 rounded-xl text-xs font-bold bg-amberGold-400 text-obsidian-950 transition";
+        window.setCategoryFilter = function(category) {
+            currentCategoryFilter = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-filter') === category) {
+                    btn.className = 'filter-btn active px-4 py-2 rounded-xl text-xs font-bold bg-amberGold-400 text-obsidian-950 transition';
                 } else {
-                    btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-obsidian-800 text-slate-200 border border-amberGold-400/25 hover:border-amberGold-400 transition";
+                    btn.className = 'filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-obsidian-800 text-slate-200 border border-amberGold-400/25 hover:border-amberGold-400 transition';
                 }
             });
             renderRecipients();
@@ -1393,22 +1366,21 @@
             renderRecipients();
         };
 
+        function getInitials(name) {
+            const words = String(name || 'JIM').replace(/[^a-zA-Z\s]/g, '').trim().split(/\s+/);
+            if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
+            return String(name || 'JM').substring(0, 2).toUpperCase();
+        }
+
         function renderRecipients() {
             const searchEl = document.getElementById('search-recipient');
+            const query = searchEl ? searchEl.value.toLowerCase().trim() : '';
             const grid = document.getElementById('recipients-grid');
             const emptyMsg = document.getElementById('no-recipients-msg');
             if (!grid) return;
 
-            const query = searchEl ? searchEl.value.toLowerCase().trim() : '';
-
-            const is30Check = function(p) {
-                const txt = (p.pingat + ' ' + p.tahunKhidmat).toLowerCase();
-                return txt.includes('30') || txt.includes('berjasa') || txt.includes('ppb');
-            };
-            const is25Check = function(p) {
-                const txt = (p.pingat + ' ' + p.tahunKhidmat).toLowerCase();
-                return txt.includes('25') || txt.includes('setia') || txt.includes('pps');
-            };
+            const is30Check = (p) => (p.pingat + ' ' + p.tahun).toLowerCase().includes('30') || p.pingat.toLowerCase().includes('berjasa') || p.pingat.toLowerCase().includes('ppb');
+            const is25Check = (p) => (p.pingat + ' ' + p.tahun).toLowerCase().includes('25') || p.pingat.toLowerCase().includes('setia') || p.pingat.toLowerCase().includes('pps');
 
             const countAllEl = document.getElementById('count-all');
             const count30El = document.getElementById('count-30');
@@ -1417,18 +1389,12 @@
             if (count30El) count30El.textContent = recipientsData.filter(is30Check).length;
             if (count25El) count25El.textContent = recipientsData.filter(is25Check).length;
 
-            const filtered = recipientsData.filter(function(item) {
+            const filtered = recipientsData.filter(p => {
                 const matchCat = currentCategoryFilter === 'ALL' ||
-                    (currentCategoryFilter === '30' && is30Check(item)) ||
-                    (currentCategoryFilter === '25' && is25Check(item));
-
-                const matchQuery = !query ||
-                    item.nama.toLowerCase().includes(query) ||
-                    item.jawatanGred.toLowerCase().includes(query) ||
-                    item.pingat.toLowerCase().includes(query) ||
-                    item.tahunKhidmat.toLowerCase().includes(query);
-
-                return matchCat && matchQuery;
+                    (currentCategoryFilter === '30' && is30Check(p)) ||
+                    (currentCategoryFilter === '25' && is25Check(p));
+                const matchText = (p.nama + ' ' + p.jawatan + ' ' + p.pingat + ' ' + p.tahun).toLowerCase().includes(query);
+                return matchCat && matchText;
             });
 
             if (filtered.length === 0) {
@@ -1438,152 +1404,107 @@
             }
 
             if (emptyMsg) emptyMsg.classList.add('hidden');
-            grid.innerHTML = filtered.map(function(person, index) {
-                const is30 = is30Check(person);
+            grid.innerHTML = filtered.map((p, idx) => {
+                const is30 = is30Check(p);
                 const badgeClass = is30
                     ? 'bg-amberGold-500/20 border-amberGold-400/40 text-amberGold-300'
                     : 'bg-sky-500/20 border-sky-400/40 text-sky-300';
-                const pingatLabel = person.pingat || (is30 ? 'Pingat Perkhidmatan Berjasa (PPB)' : 'Pingat Perkhidmatan Setia (PPS)');
-                const tahunLabel = person.tahunKhidmat || (is30 ? '30 Tahun' : '25 Tahun');
-                const imgSrc = window.resolveDriveImageUrl(person.urlGambar, 0);
-                const initials = getInitials(person.nama);
+                const imgUrl = window.resolveDriveImageUrl(p.gambar, 0);
+                const initials = escapeHtml(getInitials(p.nama));
 
-                const avatarHtml = imgSrc
-                    ? '<img src="' + escapeHtml(imgSrc) + '" data-raw-url="' + escapeHtml(person.urlGambar) + '" data-attempt="0" referrerpolicy="no-referrer" onerror="handleRecipientImgError(this)" alt="' + escapeHtml(person.nama) + '" class="w-full h-full object-cover">' +
-                      '<div style="display:none" class="w-full h-full bg-obsidian-800 items-center justify-center font-cinzel font-bold text-amberGold-300 text-base">' + initials + '</div>'
-                    : '<div class="w-full h-full bg-obsidian-800 flex items-center justify-center font-cinzel font-bold text-amberGold-300 text-base">' + initials + '</div>';
-
-                return '<div class="bg-obsidian-900/90 border border-amberGold-400/25 hover:border-amberGold-400/60 rounded-2xl p-4 sm:p-5 transition shadow-md flex items-center space-x-4">' +
-                    '<div class="w-16 h-20 sm:w-20 sm:h-24 rounded-xl p-0.5 bg-gradient-to-b from-amberGold-300 to-amberGold-600 shrink-0 overflow-hidden shadow">' +
-                        '<div class="w-full h-full rounded-[10px] overflow-hidden bg-obsidian-800">' + avatarHtml + '</div>' +
-                    '</div>' +
-                    '<div class="flex-grow min-w-0">' +
-                        '<div class="flex flex-wrap items-center gap-1.5 mb-1.5">' +
-                            '<span class="px-2.5 py-0.5 rounded-full border text-[10px] font-bold ' + badgeClass + '">' +
-                                '<i class="fa-solid fa-medal mr-1"></i>' + escapeHtml(pingatLabel) +
-                            '</span>' +
-                            '<span class="px-2 py-0.5 rounded bg-obsidian-950 border border-amberGold-400/20 text-amberGold-300 text-[10px] font-semibold">' +
-                                escapeHtml(tahunLabel) +
-                            '</span>' +
-                        '</div>' +
-                        '<h4 class="font-playfair text-base sm:text-lg font-bold text-ivory leading-snug">' + escapeHtml(person.nama) + '</h4>' +
-                        '<p class="text-xs text-slate-300 mt-1">' + escapeHtml(person.jawatanGred || 'Pegawai Jabatan Imigresen Malaysia') + '</p>' +
-                    '</div>' +
-                '</div>';
+                return `
+                <div class="bg-obsidian-900/95 border border-amberGold-400/25 hover:border-amberGold-400/60 rounded-2xl p-4 flex items-center space-x-4 transition shadow-md">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl p-0.5 bg-gradient-to-b from-amberGold-300 to-amberGold-600 shrink-0 overflow-hidden">
+                        <div class="w-full h-full rounded-[10px] bg-obsidian-800 flex items-center justify-center overflow-hidden relative">
+                            ${imgUrl ? `<img src="${escapeHtml(imgUrl)}" data-raw-url="${escapeHtml(p.gambar)}" data-attempt="0" alt="${escapeHtml(p.nama)}" referrerpolicy="no-referrer" onerror="handleRecipientImgError(this)" class="w-full h-full object-cover">` : ''}
+                            <div style="display: ${imgUrl ? 'none' : 'flex'};" class="w-full h-full items-center justify-center font-cinzel font-bold text-amberGold-300 text-lg">
+                                ${initials}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-grow min-w-0">
+                        <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-full border text-[10px] font-bold ${badgeClass}">
+                                <i class="fa-solid fa-medal mr-1"></i>${escapeHtml(p.pingat)}
+                            </span>
+                            <span class="text-[11px] font-mono text-slate-400">#${idx + 1}</span>
+                        </div>
+                        <h4 class="font-playfair text-sm sm:text-base font-bold text-ivory leading-snug truncate" title="${escapeHtml(p.nama)}">
+                            ${escapeHtml(p.nama)}
+                        </h4>
+                        <p class="text-xs text-amberGold-200/90 truncate mt-0.5">${escapeHtml(p.jawatan)}</p>
+                        ${p.tahun ? `<span class="text-[11px] text-slate-400 block mt-0.5">Tempoh Khidmat: ${escapeHtml(p.tahun)}</span>` : ''}
+                    </div>
+                </div>`;
             }).join('');
         }
 
         /**
-         * 4. JAWATANKUASA PELAKSANA ISTIADAT (AMBIL TAJUK & NAMA SAHAJA + TUGAS STANDARD)
+         * 4. JAWATANKUASA PELAKSANA (TAJUK JALUR A + TUGAS STANDARD SAHAJA)
          */
-        function getStandardAjkDuty(jkTitle) {
-            const t = String(jkTitle || '').toLowerCase();
-            if (t.includes('protokol') || t.includes('sambutan')) {
-                return "Menyelaras susunan tempat duduk VVIP, penerima pingat, serta protokol ketibaan dan sambutan tetamu kehormat.";
-            }
-            if (t.includes('istiadat') || t.includes('pengurusan penerima') || t.includes('penyampaian')) {
-                return "Menguruskan raptai penuh, susunan giliran penerima pingat, dan tatacara penyampaian anugerah di pentas.";
-            }
-            if (t.includes('kawalan') || t.includes('sword') || t.includes('perbarisan')) {
-                return "Menyelaras kawad kawalan sukuan, barisan sword bearer, dan tatacara perbarisan rasmi istiadat.";
-            }
-            if (t.includes('multimedia') || t.includes('audio') || t.includes('montaj') || t.includes('teknikal') || t.includes('ict')) {
-                return "Menyediakan tayangan montaj istiadat, paparan skrin LED, sistem audio visual, dan majalah digital.";
-            }
-            if (t.includes('juruacara') || t.includes('doa') || t.includes('teks')) {
-                return "Menyediakan teks pengacaraan rasmi istiadat, pengisytiharan nama penerima pingat, dan bacaan doa.";
-            }
-            if (t.includes('dewan') || t.includes('pentas') || t.includes('persiapan') || t.includes('logistik')) {
-                return "Memastikan susun atur dewan, hiasan pentas istiadat, dan kelengkapan logistik berada dalam keadaan sempurna.";
-            }
-            if (t.includes('pendaftaran') || t.includes('cenderamata') || t.includes('jemputan')) {
-                return "Menguruskan kaunter pendaftaran penerima pingat, edaran buku program, dan penyediaan cenderamata kenangan.";
-            }
-            if (t.includes('jamuan') || t.includes('sajian') || t.includes('makanan')) {
-                return "Menyelaras menu dan aturan jamuan rasmi VVIP, tetamu jemputan, penerima pingat, serta petugas majlis.";
-            }
-            if (t.includes('kebudayaan') || t.includes('persembahan') || t.includes('gamelan') || t.includes('muzik')) {
-                return "Menyelaras persembahan iringan muzik gamelan tradisional dan kebudayaan sepanjang berlangsungnya majlis.";
-            }
-            if (t.includes('keselamatan') || t.includes('trafik') || t.includes('parkir')) {
-                return "Mengawal selia keselamatan kawasan dewan, kelancaran aliran trafik, dan petak parkir tetamu kehormat.";
-            }
-            if (t.includes('fotografi') || t.includes('publisiti') || t.includes('dokumentasi') || t.includes('media')) {
-                return "Merakam gambar dan video rasmi istiadat serta menyelaras liputan publisiti dan dokumentasi jabatan.";
-            }
-            return "Menyelaras dan melaksanakan tugasan jawatankuasa mengikut ketetapan protokol rasmi Istiadat Penganugerahan Pingat.";
-        }
-
         async function fetchAjkFromGoogleSheets() {
-            renderAjkCards(FALLBACK_AJK_LIST);
+            const url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID_AJK + '/gviz/tq?tqx=out:json';
+            let ajkItems = [...DEFAULT_AJK_LIST];
             try {
-                const table = await loadGoogleSheetGviz(AJK_SHEET_ID, 'gvizAjkCb_' + Date.now());
-                const rows = table.rows || [];
-                const parsed = rows.map(function(row) {
-                    const cells = row.c || [];
-                    const getVal = function(idx) {
-                        if (!cells[idx] || cells[idx].v === null || cells[idx].v === undefined) return '';
-                        return String(cells[idx].f || cells[idx].v).trim();
-                    };
-                    // Ambil Tajuk Jawatankuasa (Jalur A) sahaja tanpa senarai nama (Jalur D)
-                    const tajukJk = getVal(0);
-                    return {
-                        jawatankuasa: tajukJk,
-                        tugas: getStandardAjkDuty(tajukJk)
-                    };
-                }).filter(function(item) {
-                    const jkLower = item.jawatankuasa.toLowerCase();
-                    return item.jawatankuasa &&
-                        !jkLower.includes('bil') &&
-                        jkLower !== 'ajk' &&
-                        !jkLower.includes('jawatankuasa');
-                });
-
-                if (parsed.length > 0) {
-                    renderAjkCards(parsed);
+                const res = await fetch(url);
+                const text = await res.text();
+                const json = parseGvizJson(text);
+                if (json && json.table && Array.isArray(json.table.rows)) {
+                    const seenTitles = new Set();
+                    const liveList = [];
+                    json.table.rows.forEach((row) => {
+                        const c = row.c || [];
+                        const title = (c[0] && c[0].v !== null && c[0].v !== undefined) ? String(c[0].v).trim() : '';
+                        if (!title) return;
+                        const lower = title.toLowerCase();
+                        if (lower === 'bil' || lower === 'jawatankuasa' || lower === 'nama jawatankuasa' || lower === 'ajk' || /^\d+$/.test(title)) return;
+                        if (!seenTitles.has(lower)) {
+                            seenTitles.add(lower);
+                            liveList.push({
+                                title: title,
+                                duty: resolveCommitteeDuty(title)
+                            });
+                        }
+                    });
+                    if (liveList.length > 0) {
+                        ajkItems = liveList;
+                    }
                 }
-            } catch (err) {
-                // Kekalkan senarai standard rasmi jika akses fail gerak kerja terhad
-            }
+            } catch (e) {}
+            renderAjkCards(ajkItems);
         }
 
         function renderAjkCards(list) {
             const grid = document.getElementById('ajk-grid');
             if (!grid) return;
-            grid.innerHTML = list.map(function(item, idx) {
-                return '<div class="bg-obsidian-900/90 border border-amberGold-400/25 hover:border-amberGold-400/50 rounded-2xl p-5 flex flex-col justify-between transition">' +
-                    '<div>' +
-                        '<div class="flex items-center justify-between mb-2">' +
-                            '<span class="text-[10px] font-bold uppercase tracking-widest text-amberGold-400">JK #' + String(idx + 1).padStart(2, '0') + '</span>' +
-                            '<i class="fa-solid fa-users-gear text-amberGold-400/60 text-xs"></i>' +
-                        '</div>' +
-                        '<h4 class="font-cinzel text-sm sm:text-base font-bold text-amberGold-200 leading-snug">' + escapeHtml(item.jawatankuasa) + '</h4>' +
-                    '</div>' +
-                    '<p class="text-xs text-slate-300 mt-3 pt-2.5 border-t border-slate-800 leading-relaxed">' + escapeHtml(item.tugas) + '</p>' +
-                '</div>';
-            }).join('');
+            grid.innerHTML = list.map((item, index) => `
+                <div class="bg-obsidian-900/90 border border-amberGold-400/25 hover:border-amberGold-400/50 rounded-2xl p-5 transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2.5">
+                            <span class="w-7 h-7 rounded-lg bg-amberGold-500/15 border border-amberGold-400/30 text-amberGold-300 text-xs font-bold flex items-center justify-center">
+                                ${index + 1}
+                            </span>
+                            <i class="fa-solid fa-shield-halved text-amberGold-400/50 text-xs"></i>
+                        </div>
+                        <h4 class="font-cinzel text-sm sm:text-base font-bold text-amberGold-200 leading-snug mb-2">
+                            ${escapeHtml(item.title)}
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            ${escapeHtml(item.duty)}
+                        </p>
+                    </div>
+                </div>
+            `).join('');
         }
 
         /**
-         * 5. TOAST NOTIFICATION & ANIMASI PARTIKEL EMAS TERAPUNG
+         * 5. ANIMASI HABUK PARTIKEL EMAS TERAPUNG
          */
-        function showToast(msg) {
-            const toast = document.getElementById('toast-box');
-            const msgEl = document.getElementById('toast-message');
-            if (!toast || !msgEl) return;
-            msgEl.textContent = msg;
-            toast.classList.remove('translate-x-[150%]');
-            setTimeout(function() {
-                toast.classList.add('translate-x-[150%]');
-            }, 3200);
-        }
-
         function initGoldParticles() {
             const canvas = document.getElementById('gold-particles');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            let width = 0, height = 0;
-            const particles = [];
+            let width, height, particles = [];
 
             function resize() {
                 width = canvas.width = window.innerWidth;
@@ -1592,46 +1513,38 @@
             window.addEventListener('resize', resize);
             resize();
 
-            const count = Math.min(70, Math.floor(width / 18));
+            const count = Math.min(65, Math.floor(width / 20));
             for (let i = 0; i < count; i++) {
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
                     radius: Math.random() * 2.4 + 0.6,
-                    vx: (Math.random() - 0.5) * 0.35,
-                    vy: -Math.random() * 0.45 - 0.15,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: -Math.random() * 0.5 - 0.15,
                     alpha: Math.random() * 0.7 + 0.2,
-                    pulse: Math.random() * Math.PI * 2,
-                    isBokeh: Math.random() > 0.85
+                    pulse: Math.random() * Math.PI * 2
                 });
             }
 
             function animate() {
                 ctx.clearRect(0, 0, width, height);
-                for (let i = 0; i < particles.length; i++) {
-                    const p = particles[i];
+                particles.forEach(p => {
                     p.x += p.vx;
                     p.y += p.vy;
                     p.pulse += 0.025;
 
-                    if (p.y < -15) { p.y = height + 15; p.x = Math.random() * width; }
-                    if (p.x < -15) p.x = width + 15;
-                    if (p.x > width + 15) p.x = -15;
+                    if (p.y < -10) { p.y = height + 10; p.x = Math.random() * width; }
+                    if (p.x < -10) p.x = width + 10;
+                    if (p.x > width + 10) p.x = -10;
 
-                    const alpha = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
+                    const a = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
                     ctx.beginPath();
-                    if (p.isBokeh) {
-                        ctx.arc(p.x, p.y, p.radius * 3.2, 0, Math.PI * 2);
-                        ctx.fillStyle = 'rgba(245, 158, 11, ' + (alpha * 0.16) + ')';
-                    } else {
-                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                        ctx.fillStyle = 'rgba(253, 224, 71, ' + alpha + ')';
-                        ctx.shadowBlur = 10;
-                        ctx.shadowColor = 'rgba(245, 158, 11, 0.75)';
-                    }
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(252, 211, 77, ' + a + ')';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = 'rgba(245, 158, 11, 0.75)';
                     ctx.fill();
-                    ctx.shadowBlur = 0;
-                }
+                });
                 requestAnimationFrame(animate);
             }
             animate();
@@ -1640,10 +1553,10 @@
         window.onload = function() {
             initGoldParticles();
             updateNavigationUI();
-            setupSwipeNavigation();
+            initSwipeAndKeyboard();
+            initGamelanAudio();
             fetchRecipientsFromGoogleSheets();
             fetchAjkFromGoogleSheets();
-            initGamelanAudio();
         };
     </script>
 </body>
